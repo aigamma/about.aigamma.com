@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eric Allione | AI Gamma LLC — Revenue Systems Architect</title>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0a0b0d;
+    --bg-secondary: #101114;
+    --bg-card: #15161a;
+    --bg-card-hover: #1a1b20;
+    --border: #1e2028;
+    --border-accent: #2a2d38;
+    --text-primary: #e8e9ed;
+    --text-secondary: #8b8f9e;
+    --text-tertiary: #5c6070;
+    --accent: #4a9eff;
+    --accent-dim: rgba(74, 158, 255, 0.08);
+    --accent-glow: rgba(74, 158, 255, 0.15);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.08);
+    --amber: #fbbf24;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg-primary);
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10, 11, 13, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-logo img {
+    height: 64px;
+    width: auto;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--text-primary); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: transparent;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-cta:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: stretch;
+    padding: 7rem 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-content {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-badge::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    background: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .btn-primary:hover {
+    background: #5eadff;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(74, 158, 255, 0.2);
+  }
+
+  .btn-secondary {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    top: 0;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background:
+      radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0.4;
+    pointer-events: none;
+    filter: blur(80px);
+  }
+
+  /* ===== SECTION BASE ===== */
+  section {
+    padding: 5rem 2rem;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 1px;
+    background: var(--text-tertiary);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section-body {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.85;
+  }
+
+  /* ===== PROBLEM SECTION ===== */
+  .problem {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3.5rem;
+  }
+
+  .problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .problem-card:hover {
+    border-color: var(--border-accent);
+    background: var(--bg-card-hover);
+  }
+
+  .problem-card:hover::before { opacity: 1; }
+
+  .problem-card h3 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .problem-card p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .service-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    transition: all 0.4s ease;
+    position: relative;
+  }
+
+  .service-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .service-number {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .service-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 0.35rem 0.75rem;
+    background: var(--accent-dim);
+    border: 1px solid rgba(74, 158, 255, 0.12);
+  }
+
+  /* ===== RESULTS ===== */
+  .results {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .result-metric {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--green);
+    letter-spacing: -0.02em;
+  }
+
+  .result-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .result-context {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-top: 0.25rem;
+  }
+
+  /* ===== BACKGROUND ===== */
+  .background-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  .background-narrative {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+  }
+
+  .background-narrative p + p {
+    margin-top: 1.25rem;
+  }
+
+  .background-creds {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .cred-item {
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+
+  .cred-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.4rem;
+  }
+
+  .cred-value {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* ===== SCHEDULE / CTA ===== */
+  .schedule {
+    text-align: center;
+    padding: 5rem 2rem;
+  }
+
+  .schedule .section-label {
+    justify-content: center;
+  }
+
+  .schedule .section-label::before { display: none; }
+
+  .schedule .section-heading {
+    margin: 0 auto 1rem;
+  }
+
+  .schedule .section-body {
+    margin: 0 auto 3rem;
+    text-align: center;
+    max-width: 560px;
+  }
+
+  .calendly-placeholder {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  .calendly-placeholder p {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+  }
+
+  .calendly-placeholder .placeholder-note {
+    font-size: 0.7rem;
+    margin-top: 1rem;
+    color: var(--text-tertiary);
+    opacity: 0.6;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-right {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-right a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer-right a:hover { color: var(--text-primary); }
+
+  /* ===== DIVIDER ===== */
+  .divider-line {
+    width: 48px;
+    height: 1px;
+    background: var(--border-accent);
+    margin: 2rem 0;
+  }
+
+  /* ===== CASE STUDIES ===== */
+  .casestudies {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .case-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 3.5rem;
+  }
+
+  .case-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.4s ease;
+  }
+
+  .case-card:hover {
+    border-color: var(--border-accent);
+  }
+
+  .case-header {
+    padding: 2.25rem;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 2rem;
+    user-select: none;
+  }
+
+  .case-header:hover .case-toggle {
+    color: var(--text-primary);
+  }
+
+  .case-meta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .case-type {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 0.3rem 0.65rem;
+    background: var(--accent-dim);
+    border: 1px solid rgba(74, 158, 255, 0.12);
+  }
+
+  .case-industry {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+
+  .case-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .case-summary {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    max-width: 720px;
+  }
+
+  .case-toggle {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.08em;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    padding-top: 0.5rem;
+  }
+
+  .case-toggle::after {
+    content: ' +';
+  }
+
+  .case-card.open .case-toggle::after {
+    content: ' -';
+  }
+
+  .case-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .case-card.open .case-detail {
+    max-height: 3000px;
+  }
+
+  .case-detail-inner {
+    padding: 0 2.25rem 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .case-phase {
+    margin-top: 2rem;
+  }
+
+  .case-phase-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .case-phase-title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .case-phase p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .case-phase p + p {
+    margin-top: 0.75rem;
+  }
+
+  .case-outcome-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .case-outcome {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+  }
+
+  .case-outcome-value {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 300;
+    color: var(--green);
+    margin-bottom: 0.35rem;
+  }
+
+  .case-outcome-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .case-outcome-grid {
+      grid-template-columns: 1fr;
+    }
+    .case-header {
+      grid-template-columns: 1fr;
+    }
+    .case-toggle {
+      padding-top: 0;
+    }
+  }
+
+  /* ===== AI ASSISTANT ===== */
+  .ai-assistant {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .ai-section-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 3rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+
+  .ai-context {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .ai-context p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .ai-context p + p {
+    margin-top: 1rem;
+  }
+
+  .ai-engine-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    padding: 0.4rem 0.8rem;
+    background: var(--green-dim);
+    border: 1px solid rgba(52, 211, 153, 0.15);
+  }
+
+  .ai-engine-badge::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: liveDot 2s ease-in-out infinite;
+  }
+
+  @keyframes liveDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .ai-chat-container {
+    --glow-rgb: 240, 192, 64;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .ai-chat-header {
+    padding: 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+  }
+
+  .chat-tab {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .chat-tab:hover {
+    color: var(--text-secondary);
+  }
+
+  .chat-tab.active[data-tab="sonnet"] {
+    color: #f0c040;
+    border-bottom-color: #f0c040;
+  }
+
+  .chat-tab.active[data-tab="opus"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .ai-chat-header-left {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+  }
+
+  .ai-chat-header-right {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+
+  .ai-chat-body {
+    flex: 1;
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    max-height: 500px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 90%;
+  }
+
+  .chat-msg.user {
+    align-self: flex-end;
+    align-items: flex-end;
+  }
+
+  .chat-msg.assistant {
+    align-self: flex-start;
+    align-items: flex-start;
+  }
+
+  .chat-msg-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 0 0.25rem;
+  }
+
+  .chat-msg.user .chat-msg-label { color: var(--accent); opacity: 0.7; }
+
+  .chat-msg-bubble {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    border: 1px solid var(--border);
+    white-space: pre-wrap;
+  }
+
+  .chat-msg.user .chat-msg-bubble {
+    background: var(--accent-dim);
+    border-color: rgba(74, 158, 255, 0.15);
+    color: var(--text-primary);
+  }
+
+  .chat-msg.assistant .chat-msg-bubble {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+  }
+
+  .chat-typing {
+    display: none;
+    align-self: flex-start;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg-primary);
+  }
+
+  .chat-typing-dots {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+  }
+
+  .chat-typing-dots span {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+    animation: dotPulse 1.4s ease-in-out infinite;
+  }
+
+  .chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotPulse {
+    0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1); }
+  }
+
+  .chat-welcome {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: auto;
+    max-width: 90%;
+  }
+
+  .chat-welcome strong {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .ai-chat-input-area {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .ai-chat-input-field {
+    flex: 1;
+    background: var(--bg-primary);
+    border: 1px solid rgba(var(--glow-rgb), 0.3);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    animation: inputGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes inputGlow {
+    0%, 100% { box-shadow: 0 0 6px rgba(var(--glow-rgb), 0.2), 0 0 2px rgba(var(--glow-rgb), 0.1); }
+    50% { box-shadow: 0 0 18px rgba(var(--glow-rgb), 0.5), 0 0 4px rgba(var(--glow-rgb), 0.3); }
+  }
+
+  .ai-chat-input-field::placeholder { color: var(--text-secondary); }
+  .ai-chat-input-field:focus {
+    border-color: rgba(var(--glow-rgb), 0.7);
+    box-shadow: 0 0 12px rgba(var(--glow-rgb), 0.4);
+    animation: none;
+  }
+
+  .ai-chat-send {
+    padding: 0.75rem 1.25rem;
+    background: var(--accent);
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    height: 44px;
+    font-weight: 500;
+  }
+
+  .ai-chat-send:hover { background: #5eadff; }
+  .ai-chat-send:disabled { background: var(--accent-dim); color: var(--text-tertiary); cursor: not-allowed; border: 1px solid rgba(74,158,255,0.12); }
+
+  .ai-chat-attach {
+    padding: 0.75rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-chat-attach:hover { border-color: var(--text-secondary); color: var(--text-secondary); }
+
+  .ai-chat-file-indicator {
+    display: none;
+    padding: 0.4rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-chat-file-indicator.visible { display: flex; }
+
+  .ai-chat-file-remove {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 0.25rem;
+    line-height: 1;
+  }
+
+  .ai-chat-file-remove:hover { color: var(--text-primary); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .problem-grid,
+    .results-grid {
+      grid-template-columns: 1fr;
+    }
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+    .background-content {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .nav-links { display: none; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 6rem 1.5rem 1.5rem;
+    }
+    section { padding: 3.5rem 1.5rem; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-inner {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo"><img src="/logo.png" alt="AI Gamma"></div>
+    <ul class="nav-links">
+      <li><a href="#services">Capabilities</a></li>
+      <li><a href="#results" style="color: var(--accent);">Output</a></li>
+      <li><a href="#background">Background</a></li>
+    </ul>
+    <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="nav-cta">Schedule a Conversation</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="assistant">
+  <div class="hero-grid-bg"></div>
+
+  <div class="ai-chat-container" id="chatContainer">
+    <div class="ai-chat-header">
+      <button class="chat-tab active" data-tab="sonnet" id="tabSonnet">Quick Analysis</button>
+      <button class="chat-tab" data-tab="opus" id="tabOpus">Deep Analysis</button>
+    </div>
+    <div class="ai-chat-body" id="chatBody">
+      <div class="chat-welcome" id="chatWelcome">
+        <strong style="color: var(--text-primary);">Ask anything and see how AI can respond when configured for precision rather than agreeability.<br><br>For longer and more expansive responses, switch to the Deep Analysis tab.</strong>
+      </div>
+      <div class="chat-typing" id="chatTyping">
+        <div class="chat-typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+    <div class="ai-chat-file-indicator" id="chatFileIndicator">
+      <span id="chatFileName"></span>
+      <button class="ai-chat-file-remove" id="chatFileRemove">&times;</button>
+    </div>
+    <input type="file" id="chatFileInput" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" style="display:none">
+    <div class="ai-chat-input-area">
+      <textarea
+        class="ai-chat-input-field"
+        id="chatInput"
+        placeholder="Type here"
+        rows="1"
+      ></textarea>
+      <button class="ai-chat-attach" id="chatAttach" title="Attach an image or PDF">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <button class="ai-chat-send" id="chatSend">Send</button>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Revenue Systems Architecture</div>
+    <h1>I find where complex<br>systems <em>lose value</em><br>and build the fix.</h1>
+    <p class="hero-sub">
+      Interdisciplinary systems architect and 5x operator: leverages AI strategy for cognitive amplification and to act as a force multiplier for departments. Worked across defense infrastructure, quantitative finance, DevOps, regulated healthcare, marketing, and revenue engineering. The range comes from a methodology, not a collection of credentials: first-principles reasoning rooted in philosophy, systematically amplified by AI ensemble workflows that turn any bounded domain into a solvable problem.
+    </p>
+    <div class="hero-cta-group">
+      <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="btn-primary">Schedule a Conversation</a>
+      <a href="#results" class="btn-secondary">See the Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="section-label">The Landscape</div>
+    <h2 class="section-heading">The problems I solve tend to share a common structure.</h2>
+    <p class="section-body">Organizations accumulate infrastructure debt and communication silos over time. The symptoms look like revenue problems or marketing problems, but the root cause is almost always a systems problem that nobody has the cross-functional visibility to diagnose. That diagnosis is where I operate.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h3>Specialists Cannot Talk to Each Other</h3>
+        <p>Engineering, marketing, finance, and operations each speak a different language. Without someone translating between them, decisions are made locally rather than systemically, and value falls through the gaps.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Attribution Is Broken</h3>
+        <p>Tracking and tagging infrastructure accumulates years of misconfigurations, redundant containers, and deprecated scripts. Decisions get made on data that does not reflect reality, and nobody knows because the instrument panel itself is broken.</p>
+      </div>
+      <div class="problem-card">
+        <h3>AI Is Bolted On, Not Integrated</h3>
+        <p>AI tools get adopted without the operational infrastructure to support them. The result is scattered automations with no provenance, no documentation, and no boundary controls, especially dangerous in regulated industries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-label">Capabilities</div>
+    <h2 class="section-heading">Where I operate</h2>
+    <p class="section-body">These are the domains where I have delivered measurable results, either as an embedded operator within an organization or as an independent engagement.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-number">01</div>
+        <h3>Revenue Infrastructure</h3>
+        <p>Forensic examination of analytics, attribution, and tagging infrastructure. I map the flow of value through a system, identify where it leaks, and produce documented remediation plans with projected recovery figures.</p>
+        <span class="service-tag">Analytics / Attribution / Infrastructure</span>
+      </div>
+      <div class="service-card">
+        <div class="service-number">02</div>
+        <h3>AI Operations</h3>
+        <p>Design and implementation of AI-augmented workflows with documented provenance, access controls, and compliance boundaries. Built for regulated industries including healthcare and finance, using hybrid inference architectures with controlled data boundaries.</p>
+        <span class="service-tag">HIPAA / Automation / AI Infrastructure</span>
+      </div>
+      <div class="service-card">
+        <div class="service-number">03</div>
+        <h3>Cross-Functional Integration</h3>
+        <p>I operate as the connective layer between engineering, marketing, finance, and executive teams. Stakeholder alignment, data-driven decision support, and system-level thinking applied to organizational problems that span departmental boundaries.</p>
+        <span class="service-tag">Stakeholder Alignment / Process Design</span>
+      </div>
+      <div class="service-card">
+        <div class="service-number">04</div>
+        <h3>Marketing and Ad Platform Strategy</h3>
+        <p>The advertising platform landscape is restructuring on a monthly and sometimes weekly basis as AI reshapes targeting, attribution, and campaign management. I manage vendor relationships directly with senior strategists at Google, Meta, and Pinterest, and translate platform-level changes into internal operational standards before they become competitive gaps.</p>
+        <span class="service-tag">Google / Meta / Pinterest / Campaign Architecture</span>
+      </div>
+      <div class="service-card">
+        <div class="service-number">05</div>
+        <h3>AI Coaching and Practitioner Training</h3>
+        <p>Most professionals have access to AI tools and no framework for using them beyond surface-level queries. I run live workshops where participants bring real problems, watch me build prompts and iterate in real time, and develop the instinct for which platform, model tier, and interaction style fits each task. The training covers multi-platform fluency across commercial AI systems, practical differences between model tiers, voice and dictation workflows, and the habit of integrating AI into daily operations rather than treating it as an occasional search engine.</p>
+        <span class="service-tag">Workshops / Multi-Platform / Prompt Architecture</span>
+      </div>
+      <div class="service-card">
+        <div class="service-number">06</div>
+        <h3>AI-Accelerated Research and Strategy</h3>
+        <p>I use multi-engine AI ensemble workflows to conduct deep, targeted research at a velocity that would normally require a dedicated analyst team. Hundreds of sources, academic papers, SEC filings, technical documentation, and competitive landscapes get synthesized into structured strategic output within hours rather than weeks. The depth is not sacrificed for speed. The AI provides the throughput. The philosophical training provides the interpretive framework that determines what the data actually means and where the strategic leverage is.</p>
+        <span class="service-tag">Competitive Intelligence / Strategic Analysis / Synthesis</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUT -->
+<section class="results" id="results">
+  <div class="container">
+    <div class="section-label">Output</div>
+    <h2 class="section-heading">What sustained production looks like</h2>
+    <p class="section-body">These are not cleanup metrics from broken organizations. They are sustained outputs produced at a high level over extended periods, representing the baseline of what I deliver when operating at capacity.</p>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-metric">600</div>
+        <div class="result-desc">Professional newsletters written across two positions, including 585 institutional-grade evening market analyses ghostwritten solo under daily deadline pressure without generative AI or editorial oversight. The body of work included original theoretical frameworks absorbed into sell-side research and AI training corpora. Also authored the platform's 700-page public knowledge base, which remains the canonical reference on the subject for thousands of subscribers.</div>
+        <div class="result-context">Quantitative Finance / Writing / Documentation</div>
+      </div>
+      <div class="result-card">
+        <div class="result-metric">10,000</div>
+        <div class="result-desc">Technical questions fielded from a paying professional audience of derivatives traders, quants, market makers, and fund managers. Served as sole educator, subject-matter authority, and escalation point for all technical support across the platform, including direct email correspondence requiring detailed and individualized responses.</div>
+        <div class="result-context">Education / Technical Support / Derivatives Mechanics</div>
+      </div>
+      <div class="result-card">
+        <div class="result-metric">22 Countries</div>
+        <div class="result-desc">First comprehensive documentation of the full global network topology for a DoD branch, produced with full autonomy as acting lead infrastructure architect. Presented findings to department heads at a summit and used as a reference resource across multiple departments.</div>
+        <div class="result-context">Defense Infrastructure</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- BACKGROUND -->
+<section class="background" id="background">
+  <div class="container">
+    <div class="section-label">Background</div>
+    <h2 class="section-heading">Multiple domains. One methodology.</h2>
+
+    <div class="background-content">
+      <div class="background-narrative">
+        <p>I started as a systems engineer in the defense sector, where I served as acting lead infrastructure architect for a DoD branch spanning 22 countries and held a Top Secret clearance. That foundation in hardened systems, documentation discipline, and zero-tolerance engineering became the operating layer for everything that followed.</p>
+        <p>I then dedicated five years of full-time independent study on quantitative finance, working through hundreds of books on derivatives theory, volatility modeling, and discretionary trading methodology, including deep study of the primary texts and their full bibliographies. I traded derivatives professionally during this period, specializing in volatility modeling, options structure design, and dynamic risk management.</p>
+        <p>That self-directed education led to a Principal Analyst role at a derivatives analytics firm, where I became the sole subject-matter authority on model correctness, analytical methodology, and product direction. I ghostwrote all 580 of the company's institutional-grade evening market newsletters, published under the firm's brand without co-authorship or editorial oversight, and without generative AI. The writing was not market summary. It included original theoretical frameworks on topics like the interaction between open interest and gamma exposure, negative gamma feedback loop mechanics, and the structural dynamics of volatility surfaces, all developed in real time under daily deadline pressure. I built the volatility analytics tools whose methodology has since been absorbed into sell-side research at major banks and integrated into AI training corpora. I answered over 10,000 technical questions from a paying professional audience without preparation, led a private community of international quants, market makers, and fund managers with daily engagement on strategy, and served as the company's exclusive educator, personally training every paying customer on how to build trading methodologies and apply real-time analytics from charm, gamma, and volatility models that I built for the platform. The ability to take complex quantitative concepts, develop original theory around them, and make them immediately applicable to practitioners under real-time conditions is a skill I bring to every field I operate in.</p>
+        <p>The foundation underneath all of it is philosophy. I have been studying the Western philosophical tradition seriously since I was fifteen, and it remains the central intellectual project of my life. I earned a B.A. in Philosophy and a Certificate in German specifically to engage with primary texts in their original language, and I continue to work through major works actively and repeatedly. That background is not ornamental. It is the reason I can enter unfamiliar domains and operate at a high level quickly, because deep engagement with systematic philosophy develops the ability to decompose any problem into its first principles, identify unstated assumptions, recognize where a position contains its own negation, and construct frameworks from the ground up rather than relying on received expertise. Every field I have worked in has been an application of that same underlying method of reasoning.</p>
+        <p>The practical expression of that training is how I use AI. I run parallel inference across an ensemble of engines, including local models on my own hardware alongside commercial APIs, and apply a method rooted in how contradictions reveal what a single perspective cannot see from within itself: the same problem goes to multiple models simultaneously, minority opinions are identified and cross-pollinated back into the ensemble, and criticism from one engine is relayed to another for response. The models are not doing my thinking. They are providing material for a reasoning process that I govern, and the iterative convergence produces output that is more robust than any single model and more rigorous than unstructured prompting. It is this methodology, not conventional credentialing, that allows me to operate as a 5x multiplier across defense, finance, AI, healthcare, and marketing. The philosophy provides the reasoning architecture. The AI ensemble provides the execution speed. The combination is what makes the range possible.</p>
+        <p>I now apply that combined architecture across AI engineering, regulated healthcare operations, revenue analytics, marketing operations, and cross-functional stakeholder engagement. The thread connecting all of it is the same: I find where complex systems lose value due to fragmented infrastructure or communication failure, and I build the connective layer to capture it. AI Gamma LLC is the vehicle through which I operate, recently ratified by the Arizona Secretary of State.</p>
+      </div>
+      <div class="background-creds">
+        <div class="cred-item">
+          <div class="cred-label">Education</div>
+          <div class="cred-value">M.Sc. Cybersecurity, WGU<br>B.A. Philosophy, UH Manoa</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Certification</div>
+          <div class="cred-value">VMware VCP6.5-DCV (Active)<br>CASP+, Certified Network Defense Architect, C|HFI (Inactive)</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Recognition</div>
+          <div class="cred-value">VMware vExpert 2016, 2017, 2018<br>Capstone Certificate of Excellence<br>Golden Key International Honour Society</div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-label">Location</div>
+          <div class="cred-value">Prescott, AZ<br>Remote engagements worldwide</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="schedule" id="schedule">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h2 class="section-heading">Schedule a conversation</h2>
+    <p class="section-body">Whether you are exploring a working relationship, discussing a specific problem, or evaluating fit for a role, the fastest path is a direct conversation. Pick a time that works.</p>
+
+    <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="btn-primary">Schedule a Conversation</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">2026 AI Gamma LLC &nbsp;/&nbsp; Eric Allione &nbsp;/&nbsp; Prescott, AZ</div>
+    <div class="footer-right"><a href="mailto:eric@aigamma.com" style="color: var(--accent);">eric@aigamma.com</a> &nbsp;/&nbsp; <a href="https://www.linkedin.com/in/aigamma" target="_blank" rel="noopener" style="color: var(--accent);">LinkedIn</a></div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function() {
+  // ── Config ─────────────────────────────────────────────────────
+  const CHAT_ENDPOINT = '/api/chat';
+  const MODELS = {
+    sonnet: 'claude-sonnet-4-6',
+    opus: 'claude-opus-4-6'
+  };
+
+  // ── State ──────────────────────────────────────────────────────
+  let activeTab = 'sonnet';
+  let isLoading = false;
+  const tabs = {
+    sonnet: { history: [], messages: [] },
+    opus: { history: [], messages: [] }
+  };
+
+  const welcomeText = {
+    sonnet: 'Ask anything and see how AI can respond when configured for precision rather than agreeability.<br><br>For longer and more expansive responses, switch to the Deep Analysis tab.',
+    opus: 'You are in Deep Analysis mode. Responses are longer and explore questions with greater structural depth and connective range.'
+  };
+
+  // ── DOM refs ───────────────────────────────────────────────────
+  const chatBody      = document.getElementById('chatBody');
+  const chatInput     = document.getElementById('chatInput');
+  const chatSend      = document.getElementById('chatSend');
+  const chatTyping    = document.getElementById('chatTyping');
+  const chatWelcome   = document.getElementById('chatWelcome');
+  const chatContainer = document.getElementById('chatContainer');
+  const tabSonnet     = document.getElementById('tabSonnet');
+  const tabOpus       = document.getElementById('tabOpus');
+  const chatAttach    = document.getElementById('chatAttach');
+  const chatFileInput = document.getElementById('chatFileInput');
+  const chatFileIndicator = document.getElementById('chatFileIndicator');
+  const chatFileName  = document.getElementById('chatFileName');
+  const chatFileRemove = document.getElementById('chatFileRemove');
+
+  if (!chatBody || !chatInput || !chatSend) return;
+
+  // ── File attachment state ──────────────────────────────────────
+  let pendingFile = null;
+  const MAX_FILE_SIZE = 4 * 1024 * 1024;
+  const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+
+  // Set initial welcome text
+  chatWelcome.querySelector('strong').innerHTML = welcomeText.sonnet;
+
+  // ── Tab switching ──────────────────────────────────────────────
+  function switchTab(tabName) {
+    if (tabName === activeTab || isLoading) return;
+
+    // Save current message DOM elements
+    tabs[activeTab].messages = Array.from(chatBody.querySelectorAll('.chat-msg'));
+
+    // Remove messages from DOM (but keep welcome and typing indicator)
+    tabs[activeTab].messages.forEach(function(el) { el.remove(); });
+
+    // Update active tab
+    activeTab = tabName;
+    tabSonnet.classList.toggle('active', tabName === 'sonnet');
+    tabOpus.classList.toggle('active', tabName === 'opus');
+
+    // Update glow color to match active tab
+    var glowRgb = tabName === 'sonnet' ? '240, 192, 64' : '74, 158, 255';
+    chatContainer.style.setProperty('--glow-rgb', glowRgb);
+
+    // Update welcome text for the new tab
+    chatWelcome.querySelector('strong').innerHTML = welcomeText[tabName];
+
+    // Restore the other tab's messages
+    var restored = tabs[activeTab].messages;
+    if (restored.length > 0) {
+      chatWelcome.style.display = 'none';
+      restored.forEach(function(el) {
+        chatBody.insertBefore(el, chatTyping);
+      });
+    } else {
+      chatWelcome.style.display = '';
+    }
+
+    scrollToBottom();
+    chatInput.focus();
+  }
+
+  tabSonnet.addEventListener('click', function() { switchTab('sonnet'); });
+  tabOpus.addEventListener('click', function() { switchTab('opus'); });
+
+  // ── Auto-resize textarea ───────────────────────────────────────
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // ── Enter to send (Shift+Enter for newline) ────────────────────
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  chatSend.addEventListener('click', sendMessage);
+
+  // ── File attachment handlers ────────────────────────────────────
+  chatAttach.addEventListener('click', function() {
+    chatFileInput.click();
+  });
+
+  chatFileInput.addEventListener('change', function() {
+    var file = this.files[0];
+    if (!file) return;
+
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      appendMessage('assistant', 'Unsupported file type. Accepted formats: JPEG, PNG, GIF, WebP, and PDF.');
+      this.value = '';
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      appendMessage('assistant', 'File is too large. Maximum size is 4 MB.');
+      this.value = '';
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64 = e.target.result.split(',')[1];
+      pendingFile = {
+        data: base64,
+        type: file.type,
+        name: file.name
+      };
+      chatFileName.textContent = file.name;
+      chatFileIndicator.classList.add('visible');
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+
+  chatFileRemove.addEventListener('click', function() {
+    pendingFile = null;
+    chatFileIndicator.classList.remove('visible');
+  });
+
+  // ── Append a message bubble ────────────────────────────────────
+  function appendMessage(role, text) {
+    if (chatWelcome) chatWelcome.style.display = 'none';
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'chat-msg ' + role;
+
+    var label = document.createElement('div');
+    label.className = 'chat-msg-label';
+    label.textContent = role === 'user' ? 'You' : 'AI';
+
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble';
+    bubble.textContent = text.trim();
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(bubble);
+    chatBody.insertBefore(wrapper, chatTyping);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function setLoading(state) {
+    isLoading = state;
+    chatSend.disabled = state;
+    chatTyping.style.display = state ? 'block' : 'none';
+    if (state) scrollToBottom();
+  }
+
+  // ── Main send logic (streaming) ─────────────────────────────────
+  async function sendMessage() {
+    var text = chatInput.value.trim();
+    if ((!text && !pendingFile) || isLoading) return;
+
+    var model = MODELS[activeTab];
+    var history = tabs[activeTab].history;
+    var fileToSend = pendingFile;
+
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    pendingFile = null;
+    chatFileIndicator.classList.remove('visible');
+
+    var displayText = text || '';
+    if (fileToSend) {
+      displayText = displayText ? displayText + '\n[Attached: ' + fileToSend.name + ']' : '[Attached: ' + fileToSend.name + ']';
+    }
+    appendMessage('user', displayText);
+    setLoading(true);
+
+    // Create the assistant bubble immediately for streaming
+    if (chatWelcome) chatWelcome.style.display = 'none';
+    var wrapper = document.createElement('div');
+    wrapper.className = 'chat-msg assistant';
+    var label = document.createElement('div');
+    label.className = 'chat-msg-label';
+    label.textContent = 'AI';
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble';
+    bubble.textContent = '';
+    wrapper.appendChild(label);
+    wrapper.appendChild(bubble);
+    chatBody.insertBefore(wrapper, chatTyping);
+
+    var fullResponse = '';
+    var firstTokenReceived = false;
+
+    var requestBody = {
+      message: text || '(See attached file)',
+      history: history,
+      model: model
+    };
+    if (fileToSend) {
+      requestBody.file = fileToSend;
+    }
+
+    try {
+      var res = await fetch(CHAT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!res.ok) {
+        var errData;
+        try { errData = await res.json(); } catch (e) { errData = null; }
+        throw new Error((errData && errData.error) || 'Request failed: ' + res.status);
+      }
+
+      var contentType = res.headers.get('content-type') || '';
+
+      // If the response is SSE (streaming), parse token by token
+      if (contentType.includes('text/event-stream') && res.body) {
+        var reader = res.body.getReader();
+        var decoder = new TextDecoder();
+        var buffer = '';
+
+        while (true) {
+          var chunk = await reader.read();
+          if (chunk.done) break;
+
+          buffer += decoder.decode(chunk.value, { stream: true });
+          var lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line.startsWith('data: ')) continue;
+            var data = line.slice(6);
+            if (data === '[DONE]') continue;
+            try {
+              var parsed = JSON.parse(data);
+              if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.type === 'text_delta') {
+                if (!firstTokenReceived) {
+                  firstTokenReceived = true;
+                  chatTyping.style.display = 'none';
+                  scrollToBottom();
+                }
+                fullResponse += parsed.delta.text;
+                bubble.textContent = fullResponse.trimStart();
+              }
+            } catch (e) {
+              // Non-JSON data line, skip
+            }
+          }
+        }
+      } else {
+        // Fallback: non-streaming JSON response (e.g., if function returns JSON error)
+        var data = await res.json();
+        fullResponse = data.response || 'No response received.';
+        bubble.textContent = fullResponse;
+      }
+
+      if (!fullResponse) {
+        bubble.textContent = 'No response received.';
+        fullResponse = 'No response received.';
+      }
+
+      var historyText = fileToSend ? '[Attached: ' + fileToSend.name + '] ' + (text || '') : text;
+      history.push({ role: 'user', content: historyText.trim() });
+      history.push({ role: 'assistant', content: fullResponse.trimStart() });
+
+      // Graceful conversation limit at 50 turns per tab
+      if (history.length >= 100) {
+        chatInput.disabled = true;
+        chatSend.disabled = true;
+        chatInput.placeholder = 'Message limit reached for this tab. Refresh to start a new session.';
+        var limitMsg = document.createElement('div');
+        limitMsg.style.cssText = 'font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-tertiary); text-align: center; padding: 1rem; letter-spacing: 0.05em;';
+        limitMsg.textContent = 'Message limit reached for this tab. Refresh to start a new session.';
+        chatBody.appendChild(limitMsg);
+        scrollToBottom();
+      }
+
+    } catch (err) {
+      console.error('Chat error:', err);
+      bubble.textContent = err.message || 'Something went wrong. Please try again or refresh the page.';
+    } finally {
+      setLoading(false);
+      chatInput.focus();
+    }
+  }
+
+  // ── Case study accordion ─────────────────────────────────────
+  document.querySelectorAll('.case-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      var card = this.closest('.case-card');
+      card.classList.toggle('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>
