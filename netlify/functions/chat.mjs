@@ -46,6 +46,29 @@ const TOOLS = [
       },
       required: ['prompt']
     }
+  },
+  {
+    name: 'generate_document',
+    description: 'Generate a downloadable PDF or Word document. Use this when the user asks you to create, write, draft, or produce a document, report, letter, memo, essay, or file that they can download. Write the full document content yourself.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          description: 'The document title displayed at the top'
+        },
+        content: {
+          type: 'string',
+          description: 'The full document text content. Use double newlines to separate paragraphs. Write complete, polished prose.'
+        },
+        format: {
+          type: 'string',
+          enum: ['pdf', 'docx'],
+          description: 'Output format. Use pdf unless the user specifically requests a Word document or docx.'
+        }
+      },
+      required: ['title', 'content', 'format']
+    }
   }
 ];
 
@@ -125,6 +148,21 @@ async function executeTools(toolUseBlocks, sendEvent) {
         type: 'tool_result',
         tool_use_id: block.id,
         content: 'The image was generated successfully and is now visible to the user below your text. Do not include any markdown image syntax, image links, or references to the image file. Simply describe in one or two sentences what the image depicts based on the prompt you wrote.'
+      });
+    } else if (block.name === 'generate_document') {
+      if (sendEvent) {
+        sendEvent({ type: 'image_status', text: 'Generating document...' });
+        sendEvent({
+          type: 'document_ready',
+          title: block.input.title,
+          content: block.input.content,
+          format: block.input.format
+        });
+      }
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: 'The ' + block.input.format.toUpperCase() + ' document has been generated and a download button is now visible to the user. Do not reproduce the document content in your response. Simply confirm what document was created in one or two sentences.'
       });
     }
   }

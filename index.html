@@ -834,6 +834,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-top: 6px;
   }
 
   .ai-chat-header {
@@ -950,6 +951,27 @@
     border: 1px solid var(--border);
     margin-top: 0.5rem;
     display: block;
+  }
+
+  .chat-download-btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(74, 158, 255, 0.15);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .chat-download-btn:hover {
+    background: rgba(74, 158, 255, 0.15);
+    border-color: var(--accent);
   }
 
   .chat-image-status {
@@ -1393,7 +1415,7 @@
   };
 
   const welcomeText = {
-    sonnet: 'Ask anything and see how AI can respond when configured for precision rather than agreeability. You may also create images or analyze attachments. <br><br>For longer and more expansive responses, switch to the Deep Analysis tab.',
+    sonnet: 'Ask anything and see how AI can respond when configured for precision rather than agreeability. You may also create images, generate documents, or analyze attachments. <br><br>For longer and more expansive responses, switch to the Deep Analysis tab.',
     opus: 'You are in Deep Analysis mode. Responses are longer and explore questions with greater structural depth and connective range.'
   };
 
@@ -1654,7 +1676,31 @@
             if (data === '[DONE]') continue;
             try {
               var parsed = JSON.parse(data);
+              if (parsed.type === 'content_block_start' && parsed.content_block) {
+                var toolStatus = '';
+                if (parsed.content_block.type === 'tool_use') {
+                  var tn = parsed.content_block.name;
+                  if (tn === 'web_fetch') toolStatus = 'Fetching web page...';
+                  else if (tn === 'generate_image') toolStatus = 'Preparing image...';
+                  else if (tn === 'generate_document') toolStatus = 'Generating document...';
+                }
+                if (parsed.content_block.type === 'server_tool_use') {
+                  toolStatus = 'Searching the web...';
+                }
+                if (toolStatus) {
+                  chatTyping.style.display = 'none';
+                  var ts = wrapper.querySelector('.chat-image-status');
+                  if (!ts) {
+                    ts = document.createElement('div');
+                    ts.className = 'chat-image-status';
+                    wrapper.appendChild(ts);
+                  }
+                  ts.textContent = toolStatus;
+                }
+              }
               if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.type === 'text_delta') {
+                var oldStatus = wrapper.querySelector('.chat-image-status');
+                if (oldStatus) oldStatus.remove();
                 if (!firstTokenReceived) {
                   firstTokenReceived = true;
                   chatTyping.style.display = 'none';
@@ -1709,6 +1755,91 @@
                     if (statusEl) {
                       statusEl.textContent = 'Image generation failed.';
                       statusEl.style.animation = 'none';
+                    }
+                  }
+                })();
+              }
+              if (parsed.type === 'document_ready') {
+                (async function() {
+                  var docTitle = parsed.title;
+                  var docContent = parsed.content;
+                  var docFormat = parsed.format;
+                  var statusEl = wrapper.querySelector('.chat-image-status');
+                  try {
+                    var blob;
+                    var filename = docTitle.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '_') + '.' + docFormat;
+                    if (docFormat === 'pdf') {
+                      if (!window.jspdf) {
+                        await new Promise(function(resolve, reject) {
+                          var s = document.createElement('script');
+                          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
+                          s.onload = resolve;
+                          s.onerror = reject;
+                          document.head.appendChild(s);
+                        });
+                      }
+                      var pdf = new window.jspdf.jsPDF();
+                      pdf.setFont('helvetica', 'bold');
+                      pdf.setFontSize(18);
+                      pdf.text(docTitle, 20, 25);
+                      pdf.setFont('helvetica', 'normal');
+                      pdf.setFontSize(11);
+                      var paragraphs = docContent.split('\n\n');
+                      var y = 40;
+                      for (var p = 0; p < paragraphs.length; p++) {
+                        var lines = pdf.splitTextToSize(paragraphs[p].trim(), 170);
+                        for (var l = 0; l < lines.length; l++) {
+                          if (y > 280) { pdf.addPage(); y = 25; }
+                          pdf.text(lines[l], 20, y);
+                          y += 6;
+                        }
+                        y += 6;
+                      }
+                      blob = pdf.output('blob');
+                    } else {
+                      if (!window.docx) {
+                        await new Promise(function(resolve, reject) {
+                          var s = document.createElement('script');
+                          s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.min.js';
+                          s.onload = resolve;
+                          s.onerror = reject;
+                          document.head.appendChild(s);
+                        });
+                      }
+                      var children = [
+                        new window.docx.Paragraph({
+                          children: [new window.docx.TextRun({ text: docTitle, bold: true, size: 32 })],
+                          spacing: { after: 300 }
+                        })
+                      ];
+                      var paras = docContent.split('\n\n');
+                      for (var p = 0; p < paras.length; p++) {
+                        children.push(new window.docx.Paragraph({
+                          children: [new window.docx.TextRun({ text: paras[p].trim(), size: 22 })],
+                          spacing: { after: 200 }
+                        }));
+                      }
+                      var ddoc = new window.docx.Document({ sections: [{ children: children }] });
+                      blob = await window.docx.Packer.toBlob(ddoc);
+                    }
+                    if (statusEl) statusEl.remove();
+                    var url = URL.createObjectURL(blob);
+                    var btn = document.createElement('a');
+                    btn.href = url;
+                    btn.download = filename;
+                    btn.className = 'chat-download-btn';
+                    btn.textContent = 'Download ' + filename;
+                    wrapper.appendChild(btn);
+                  } catch (e) {
+                    if (statusEl) {
+                      statusEl.textContent = 'Document generation failed.';
+                      statusEl.style.animation = 'none';
+                    } else {
+                      var errEl = document.createElement('div');
+                      errEl.className = 'chat-image-status';
+                      errEl.style.animation = 'none';
+                      errEl.textContent = 'Document generation failed.';
+                      wrapper.appendChild(errEl);
                     }
                   }
                 })();
