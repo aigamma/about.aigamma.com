@@ -945,6 +945,23 @@
     color: var(--text-secondary);
   }
 
+  .chat-msg-image {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  .chat-image-status {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
+    animation: dotPulse 1.4s ease-in-out infinite;
+  }
+
   .chat-typing {
     display: none;
     align-self: flex-start;
@@ -1353,11 +1370,11 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-left">2026 AI Gamma LLC &nbsp;/&nbsp; Eric Allione &nbsp;/&nbsp; Prescott, AZ</div>
-    <div class="footer-right"><a href="mailto:eric@aigamma.com" style="color: var(--accent);">eric@aigamma.com</a> &nbsp;/&nbsp; <a href="https://www.linkedin.com/in/aigamma" target="_blank" rel="noopener" style="color: var(--accent);">LinkedIn</a></div>
+    <div class="footer-right"><a href="/cdn-cgi/l/email-protection#ee8b9c878dae8f87898f83838fc08d8183" style="color: var(--accent);"><span class="__cf_email__" data-cfemail="5e3b2c373d1e3f37393f33333f703d3133">[email&#160;protected]</span></a> &nbsp;/&nbsp; <a href="https://www.linkedin.com/in/aigamma" target="_blank" rel="noopener" style="color: var(--accent);">LinkedIn</a></div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function() {
   // ── Config ─────────────────────────────────────────────────────
   const CHAT_ENDPOINT = '/api/chat';
@@ -1645,6 +1662,56 @@
                 fullResponse += parsed.delta.text;
                 bubble.textContent = fullResponse.trimStart();
               }
+              if (parsed.type === 'image_status') {
+                var existingStatus = wrapper.querySelector('.chat-image-status');
+                if (parsed.text) {
+                  if (!existingStatus) {
+                    existingStatus = document.createElement('div');
+                    existingStatus.className = 'chat-image-status';
+                    wrapper.appendChild(existingStatus);
+                  }
+                  existingStatus.textContent = parsed.text;
+                  chatTyping.style.display = 'none';
+                } else if (existingStatus) {
+                  existingStatus.remove();
+                }
+              }
+              if (parsed.type === 'image_prompt') {
+                (async function() {
+                  try {
+                    var imgRes = await fetch('https://aigamma.app.n8n.cloud/webhook/ace9a65a-95df-4f64-b601-604fad03cda0', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ prompt: parsed.prompt })
+                    });
+                    var imgData = await imgRes.json();
+                    var statusEl = wrapper.querySelector('.chat-image-status');
+                    if (statusEl) statusEl.remove();
+                    if (imgData && imgData.data && imgData.data[0] && imgData.data[0].b64_json) {
+                      var img = document.createElement('img');
+                      img.className = 'chat-msg-image';
+                      img.src = 'data:image/webp;base64,' + imgData.data[0].b64_json;
+                      img.alt = 'AI generated image';
+                      wrapper.appendChild(img);
+                    } else {
+                      var errStatus = wrapper.querySelector('.chat-image-status');
+                      if (!errStatus) {
+                        errStatus = document.createElement('div');
+                        errStatus.className = 'chat-image-status';
+                        errStatus.style.animation = 'none';
+                        wrapper.appendChild(errStatus);
+                      }
+                      errStatus.textContent = 'Image generation failed.';
+                    }
+                  } catch (e) {
+                    var statusEl = wrapper.querySelector('.chat-image-status');
+                    if (statusEl) {
+                      statusEl.textContent = 'Image generation failed.';
+                      statusEl.style.animation = 'none';
+                    }
+                  }
+                })();
+              }
             } catch (e) {
               // Non-JSON data line, skip
             }
@@ -1695,6 +1762,7 @@
       card.classList.toggle('open');
     });
   });
+
 })();
 </script>
 </body>

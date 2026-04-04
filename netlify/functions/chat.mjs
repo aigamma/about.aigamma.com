@@ -32,6 +32,20 @@ const TOOLS = [
       },
       required: ['url']
     }
+  },
+  {
+    name: 'generate_image',
+    description: 'Generate an image based on a text description. Use this when the user asks you to create, draw, generate, make, design, or visualize an image, picture, illustration, graphic, or visual. Write a detailed, specific prompt that will produce a high-quality image.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        prompt: {
+          type: 'string',
+          description: 'A detailed description of the image to generate. Be specific about composition, style, colors, lighting, perspective, and subject details.'
+        }
+      },
+      required: ['prompt']
+    }
   }
 ];
 
@@ -92,7 +106,7 @@ async function fetchUrl(url) {
   }
 }
 
-async function executeTools(toolUseBlocks) {
+async function executeTools(toolUseBlocks, sendEvent) {
   const results = [];
   for (const block of toolUseBlocks) {
     if (block.name === 'web_fetch') {
@@ -101,6 +115,16 @@ async function executeTools(toolUseBlocks) {
         type: 'tool_result',
         tool_use_id: block.id,
         content: content
+      });
+    } else if (block.name === 'generate_image') {
+      if (sendEvent) {
+        sendEvent({ type: 'image_status', text: 'Generating image...' });
+        sendEvent({ type: 'image_prompt', prompt: block.input.prompt });
+      }
+      results.push({
+        type: 'tool_result',
+        tool_use_id: block.id,
+        content: 'The image was generated successfully and is now visible to the user below your text. Do not include any markdown image syntax, image links, or references to the image file. Simply describe in one or two sentences what the image depicts based on the prompt you wrote.'
       });
     }
   }
@@ -326,7 +350,13 @@ export default async (req) => {
           );
 
           if (customToolBlocks.length > 0) {
-            const toolResults = await executeTools(customToolBlocks);
+            const sendEvent = (eventData) => {
+              controller.enqueue(encoder.encode(
+                'data: ' + JSON.stringify(eventData) + '\n\n'
+              ));
+            };
+
+            const toolResults = await executeTools(customToolBlocks, sendEvent);
 
             const newMessages = [
               ...apiMessages,
