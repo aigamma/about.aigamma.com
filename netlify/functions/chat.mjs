@@ -49,7 +49,7 @@ const TOOLS = [
   },
   {
     name: 'generate_document',
-    description: 'Generate a downloadable PDF or Word document. Use this when the user asks you to create, write, draft, or produce a document, report, letter, memo, essay, or file that they can download. Write the full document content yourself.',
+    description: 'Generate a downloadable PDF or Word document. Use this when the user asks you to create, write, draft, or produce a document, report, letter, memo, essay, or file that they can download. Write the full document content yourself. Do not combine this with generate_image in the same response. Handle one generation request at a time.',
     input_schema: {
       type: 'object',
       properties: {
