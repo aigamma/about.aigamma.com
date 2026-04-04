@@ -1676,31 +1676,7 @@
             if (data === '[DONE]') continue;
             try {
               var parsed = JSON.parse(data);
-              if (parsed.type === 'content_block_start' && parsed.content_block) {
-                var toolStatus = '';
-                if (parsed.content_block.type === 'tool_use') {
-                  var tn = parsed.content_block.name;
-                  if (tn === 'web_fetch') toolStatus = 'Fetching web page...';
-                  else if (tn === 'generate_image') toolStatus = 'Preparing image...';
-                  else if (tn === 'generate_document') toolStatus = 'Generating document...';
-                }
-                if (parsed.content_block.type === 'server_tool_use') {
-                  toolStatus = 'Searching the web...';
-                }
-                if (toolStatus) {
-                  chatTyping.style.display = 'none';
-                  var ts = wrapper.querySelector('.chat-image-status');
-                  if (!ts) {
-                    ts = document.createElement('div');
-                    ts.className = 'chat-image-status';
-                    wrapper.appendChild(ts);
-                  }
-                  ts.textContent = toolStatus;
-                }
-              }
               if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.type === 'text_delta') {
-                var oldStatus = wrapper.querySelector('.chat-image-status');
-                if (oldStatus) oldStatus.remove();
                 if (!firstTokenReceived) {
                   firstTokenReceived = true;
                   chatTyping.style.display = 'none';
