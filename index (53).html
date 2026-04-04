@@ -896,6 +896,7 @@
     overflow-y: auto;
     max-height: 500px;
     scroll-behavior: smooth;
+    position: relative;
   }
 
   .chat-msg {
@@ -1571,7 +1572,15 @@
     // Scroll so the user's message is at the top of the visible chat area
     var userMsgs = chatBody.querySelectorAll('.chat-msg.user');
     var lastUserMsg = userMsgs[userMsgs.length - 1];
-    if (lastUserMsg) lastUserMsg.scrollIntoView({ block: 'start' });
+    function scrollToUserMsg() {
+      if (!lastUserMsg) return;
+      chatBody.style.scrollBehavior = 'auto';
+      var chatRect = chatBody.getBoundingClientRect();
+      var msgRect = lastUserMsg.getBoundingClientRect();
+      chatBody.scrollTop += (msgRect.top - chatRect.top);
+      chatBody.style.scrollBehavior = '';
+    }
+    setTimeout(scrollToUserMsg, 50);
 
     var fullResponse = '';
     var firstTokenReceived = false;
@@ -1625,7 +1634,7 @@
                 if (!firstTokenReceived) {
                   firstTokenReceived = true;
                   chatTyping.style.display = 'none';
-                  if (lastUserMsg) lastUserMsg.scrollIntoView({ block: 'start' });
+                  scrollToUserMsg();
                 }
                 fullResponse += parsed.delta.text;
                 bubble.textContent = fullResponse.trimStart();
