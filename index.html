@@ -895,7 +895,6 @@
     gap: 1rem;
     overflow-y: auto;
     max-height: 500px;
-    scroll-behavior: smooth;
     position: relative;
   }
 
@@ -1574,13 +1573,9 @@
     var lastUserMsg = userMsgs[userMsgs.length - 1];
     function scrollToUserMsg() {
       if (!lastUserMsg) return;
-      chatBody.style.scrollBehavior = 'auto';
-      var chatRect = chatBody.getBoundingClientRect();
-      var msgRect = lastUserMsg.getBoundingClientRect();
-      chatBody.scrollTop += (msgRect.top - chatRect.top);
-      chatBody.style.scrollBehavior = '';
+      chatBody.scrollTop = lastUserMsg.offsetTop;
     }
-    setTimeout(scrollToUserMsg, 50);
+    setTimeout(scrollToUserMsg, 20);
 
     var fullResponse = '';
     var firstTokenReceived = false;
