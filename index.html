@@ -1776,7 +1776,7 @@
                       if (!window.docx) {
                         await new Promise(function(resolve, reject) {
                           var s = document.createElement('script');
-                          s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.min.js';
+                          s.src = 'https://unpkg.com/docx@8.2.4/build/index.umd.js';
                           s.onload = resolve;
                           s.onerror = reject;
                           document.head.appendChild(s);
