@@ -1522,7 +1522,10 @@
     scrollToBottom();
   }
 
+  var suppressScroll = false;
+
   function scrollToBottom() {
+    if (suppressScroll) return;
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
@@ -1551,6 +1554,7 @@
     if (fileToSend) {
       displayText = displayText ? displayText + '\n[Attached: ' + fileToSend.name + ']' : '[Attached: ' + fileToSend.name + ']';
     }
+    suppressScroll = true;
     appendMessage('user', displayText);
     setLoading(true);
 
@@ -1568,6 +1572,11 @@
     wrapper.appendChild(bubble);
     chatBody.insertBefore(wrapper, chatTyping);
 
+    // Add bottom padding to create enough scroll room
+    // for the user message to reach the top of the viewport
+    chatBody.style.paddingBottom = chatBody.clientHeight + 'px';
+    suppressScroll = false;
+
     // Scroll so the user's message is at the top of the visible chat area
     var userMsgs = chatBody.querySelectorAll('.chat-msg.user');
     var lastUserMsg = userMsgs[userMsgs.length - 1];
@@ -1575,7 +1584,9 @@
       if (!lastUserMsg) return;
       chatBody.scrollTop = lastUserMsg.offsetTop;
     }
-    setTimeout(scrollToUserMsg, 20);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(scrollToUserMsg);
+    });
 
     var fullResponse = '';
     var firstTokenReceived = false;
@@ -1671,6 +1682,7 @@
       console.error('Chat error:', err);
       bubble.textContent = err.message || 'Something went wrong. Please try again or refresh the page.';
     } finally {
+      chatBody.style.paddingBottom = '';
       setLoading(false);
       chatInput.focus();
     }
