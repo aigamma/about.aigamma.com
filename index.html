@@ -956,13 +956,6 @@
     color: var(--text-secondary);
   }
 
-  .chat-msg-image {
-    max-width: 100%;
-    border: 1px solid var(--border);
-    margin-top: 0.5rem;
-    display: block;
-  }
-
   .chat-download-btn {
     display: inline-block;
     margin-top: 0.5rem;
@@ -1708,42 +1701,6 @@
                 } else if (existingStatus) {
                   existingStatus.remove();
                 }
-              }
-              if (parsed.type === 'image_prompt') {
-                (async function() {
-                  try {
-                    var imgRes = await fetch('https://aigamma.app.n8n.cloud/webhook/ace9a65a-95df-4f64-b601-604fad03cda0', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ prompt: parsed.prompt })
-                    });
-                    var imgData = await imgRes.json();
-                    var statusEl = wrapper.querySelector('.chat-image-status');
-                    if (statusEl) statusEl.remove();
-                    if (imgData && imgData.data && imgData.data[0] && imgData.data[0].b64_json) {
-                      var img = document.createElement('img');
-                      img.className = 'chat-msg-image';
-                      img.src = 'data:image/webp;base64,' + imgData.data[0].b64_json;
-                      img.alt = 'AI generated image';
-                      wrapper.appendChild(img);
-                    } else {
-                      var errStatus = wrapper.querySelector('.chat-image-status');
-                      if (!errStatus) {
-                        errStatus = document.createElement('div');
-                        errStatus.className = 'chat-image-status';
-                        errStatus.style.animation = 'none';
-                        wrapper.appendChild(errStatus);
-                      }
-                      errStatus.textContent = 'Image generation failed.';
-                    }
-                  } catch (e) {
-                    var statusEl = wrapper.querySelector('.chat-image-status');
-                    if (statusEl) {
-                      statusEl.textContent = 'Image generation failed.';
-                      statusEl.style.animation = 'none';
-                    }
-                  }
-                })();
               }
               if (parsed.type === 'document_ready') {
                 (async function() {
