@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eric Allione | AI Gamma LLC — Revenue Systems Architect</title>
+<title>Eric Allione | AI Gamma — Revenue Systems Architect</title>
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
-<meta name="description" content="Eric Allione | AI Gamma LLC. Revenue Systems Architect and interdisciplinary operator across defense infrastructure, quantitative finance, AI operations, regulated healthcare, and revenue engineering.">
+<meta name="description" content="Eric Allione | AI Gamma. Revenue Systems Architect and interdisciplinary operator across defense infrastructure, quantitative finance, AI operations, regulated healthcare, and revenue engineering.">
 <link rel="canonical" href="https://about.aigamma.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://about.aigamma.com/">
-<meta property="og:title" content="Eric Allione | AI Gamma LLC — Revenue Systems Architect">
+<meta property="og:title" content="Eric Allione | AI Gamma — Revenue Systems Architect">
 <meta property="og:description" content="Revenue Systems Architect and interdisciplinary operator across defense infrastructure, quantitative finance, AI operations, regulated healthcare, and revenue engineering.">
 <meta property="og:image" content="https://about.aigamma.com/logo.webp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Eric Allione | AI Gamma LLC — Revenue Systems Architect">
+<meta name="twitter:title" content="Eric Allione | AI Gamma — Revenue Systems Architect">
 <meta name="twitter:description" content="Revenue Systems Architect and interdisciplinary operator across defense infrastructure, quantitative finance, AI operations, regulated healthcare, and revenue engineering.">
 <meta name="twitter:image" content="https://about.aigamma.com/logo.webp">
 <script type="application/ld+json">
@@ -35,7 +35,7 @@
     {
       "@type": "Organization",
       "@id": "https://about.aigamma.com/#ai-gamma",
-      "name": "AI Gamma LLC",
+      "name": "AI Gamma",
       "url": "https://aigamma.com/",
       "logo": "https://about.aigamma.com/logo.webp",
       "founder": { "@id": "https://about.aigamma.com/#eric-allione" },
@@ -1165,6 +1165,138 @@
 
   .ai-chat-file-remove:hover { color: var(--text-primary); }
 
+  /* ===== CHAT FULLSCREEN MODE ===== */
+  .ai-chat-collapse {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.85rem 1.2rem;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s ease, background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .ai-chat-collapse:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .ai-chat-collapse svg { flex-shrink: 0; }
+
+  .ai-chat-container.expanded .ai-chat-collapse {
+    display: inline-flex;
+  }
+
+  .ai-chat-container.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    margin: 0;
+    border: none;
+    z-index: 200;
+    animation: chatExpandIn 0.22s ease-out;
+  }
+
+  @keyframes chatExpandIn {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+  }
+
+  body.chat-expanded { overflow: hidden; }
+
+  .ai-chat-container.expanded .ai-chat-body {
+    max-height: none;
+    padding: 2rem max(1.5rem, calc((100vw - 1100px) / 2));
+    gap: 1.25rem;
+  }
+
+  .ai-chat-container.expanded .chat-msg-bubble {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    padding: 0.95rem 1.3rem;
+  }
+
+  .ai-chat-container.expanded .chat-msg-label {
+    font-size: 0.65rem;
+  }
+
+  .ai-chat-container.expanded .chat-welcome {
+    font-size: 1rem;
+    line-height: 1.85;
+    max-width: 620px;
+    padding: 4rem 1.5rem;
+  }
+
+  .ai-chat-container.expanded .chat-tab {
+    font-size: 0.75rem;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .ai-chat-container.expanded .ai-chat-input-area {
+    padding: 1.25rem max(1.5rem, calc((100vw - 1100px) / 2));
+    gap: 0.75rem;
+  }
+
+  .ai-chat-container.expanded .ai-chat-input-field {
+    font-size: 1rem;
+    min-height: 52px;
+    max-height: 200px;
+    padding: 0.9rem 1.1rem;
+  }
+
+  .ai-chat-container.expanded .ai-chat-send {
+    font-size: 0.75rem;
+    height: 52px;
+    padding: 0 1.75rem;
+  }
+
+  .ai-chat-container.expanded .ai-chat-attach {
+    height: 52px;
+    width: 52px;
+  }
+
+  .ai-chat-container.expanded .ai-chat-file-indicator {
+    padding: 0.6rem max(1.5rem, calc((100vw - 1100px) / 2));
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 900px) {
+    .ai-chat-container.expanded .ai-chat-body {
+      padding: 1rem 1.25rem;
+      gap: 1rem;
+    }
+    .ai-chat-container.expanded .ai-chat-input-area {
+      padding: 1rem 1.25rem;
+    }
+    .ai-chat-container.expanded .ai-chat-file-indicator {
+      padding: 0.6rem 1.25rem;
+    }
+    .ai-chat-container.expanded .chat-msg-bubble {
+      font-size: 1rem;
+      padding: 0.85rem 1.15rem;
+    }
+    .ai-chat-container.expanded .ai-chat-collapse {
+      padding: 0.85rem 0.9rem;
+    }
+    .ai-chat-container.expanded .ai-chat-collapse-label {
+      display: none;
+    }
+  }
+
   /* ===== ANIMATIONS ===== */
   @keyframes fadeUp {
     from {
@@ -1231,6 +1363,15 @@
     <div class="ai-chat-header">
       <button class="chat-tab active" data-tab="sonnet" id="tabSonnet">Quick Analysis</button>
       <button class="chat-tab" data-tab="opus" id="tabOpus">Deep Analysis</button>
+      <button class="ai-chat-collapse" id="chatCollapse" aria-label="Collapse chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 14 10 14 10 20"/>
+          <polyline points="20 10 14 10 14 4"/>
+          <line x1="14" y1="10" x2="21" y2="3"/>
+          <line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+        <span class="ai-chat-collapse-label">Collapse</span>
+      </button>
     </div>
     <div class="ai-chat-body" id="chatBody">
       <div class="chat-welcome" id="chatWelcome">
@@ -1389,7 +1530,7 @@
         <p>That self-directed education led to a Principal Analyst role at a derivatives analytics firm, where I became the sole subject-matter authority on model correctness, analytical methodology, and product direction. I ghostwrote all 580 of the company's institutional-grade evening market newsletters, published under the firm's brand without co-authorship or editorial oversight, and without generative AI. The writing was not market summary. It included original theoretical frameworks on topics like the interaction between open interest and gamma exposure, negative gamma feedback loop mechanics, and the structural dynamics of volatility surfaces, all developed in real time under daily deadline pressure. I built the volatility analytics tools whose methodology has since been absorbed into sell-side research at major banks and integrated into AI training corpora. I answered over 10,000 technical questions from a paying professional audience without preparation, led a private community of international quants, market makers, and fund managers with daily engagement on strategy, and served as the company's exclusive educator, personally training every paying customer on how to build trading methodologies and apply real-time analytics from charm, gamma, and volatility models that I built for the platform. The ability to take complex quantitative concepts, develop original theory around them, and make them immediately applicable to practitioners under real-time conditions is a skill I bring to every field I operate in.</p>
         <p>The foundation underneath all of it is philosophy. I have been studying the Western philosophical tradition seriously since I was fifteen, and it remains the central intellectual project of my life. I earned a B.A. in Philosophy and a Certificate in German specifically to engage with primary texts in their original language, and I continue to work through major works actively and repeatedly. That background is not ornamental. It is the reason I can enter unfamiliar domains and operate at a high level quickly, because deep engagement with systematic philosophy develops the ability to decompose any problem into its first principles, identify unstated assumptions, recognize where a position contains its own negation, and construct frameworks from the ground up rather than relying on received expertise. Every field I have worked in has been an application of that same underlying method of reasoning.</p>
         <p>The practical expression of that training is how I use AI. I run parallel inference across an ensemble of engines, including local models on my own hardware alongside commercial APIs, and apply a method rooted in how contradictions reveal what a single perspective cannot see from within itself: the same problem goes to multiple models simultaneously, minority opinions are identified and cross-pollinated back into the ensemble, and criticism from one engine is relayed to another for response. The models are not doing my thinking. They are providing material for a reasoning process that I govern, and the iterative convergence produces output that is more robust than any single model and more rigorous than unstructured prompting. It is this methodology, not conventional credentialing, that allows me to operate as a 5x multiplier across defense, finance, AI, healthcare, and marketing. The philosophy provides the reasoning architecture. The AI ensemble provides the execution speed. The combination is what makes the range possible.</p>
-        <p>I now apply that combined architecture across AI engineering, regulated healthcare operations, revenue analytics, marketing operations, and cross-functional stakeholder engagement. The thread connecting all of it is the same: I find where complex systems lose value due to fragmented infrastructure or communication failure, and I build the connective layer to capture it. AI Gamma LLC is the vehicle through which I operate, recently ratified by the Arizona Secretary of State.</p>
+        <p>I now apply that combined architecture across AI engineering, regulated healthcare operations, revenue analytics, marketing operations, and cross-functional stakeholder engagement. The thread connecting all of it is the same: I find where complex systems lose value due to fragmented infrastructure or communication failure, and I build the connective layer to capture it. AI Gamma is the vehicle through which I operate, recently ratified by the Arizona Secretary of State.</p>
       </div>
       <div class="background-creds">
         <div class="cred-item">
@@ -1427,7 +1568,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-left">&copy; 2026 AI Gamma LLC &nbsp;/&nbsp; Eric Allione &nbsp;/&nbsp; Prescott, AZ</div>
+    <div class="footer-left">&copy; 2026 AI Gamma &nbsp;/&nbsp; Eric Allione &nbsp;/&nbsp; Prescott, AZ</div>
     <div class="footer-right"><a href="mailto:eric@aigamma.com" style="color: var(--accent);">eric@aigamma.com</a> &nbsp;/&nbsp; <a href="https://www.linkedin.com/in/aigamma" target="_blank" rel="noopener" style="color: var(--accent);">LinkedIn</a></div>
   </div>
 </footer>
@@ -1468,8 +1609,44 @@
   const chatFileIndicator = document.getElementById('chatFileIndicator');
   const chatFileName  = document.getElementById('chatFileName');
   const chatFileRemove = document.getElementById('chatFileRemove');
+  const chatCollapse  = document.getElementById('chatCollapse');
 
   if (!chatBody || !chatInput || !chatSend) return;
+
+  // ── Expand / collapse chat to fullscreen ────────────────────
+  function expandChat() {
+    if (chatContainer.classList.contains('expanded')) return;
+    chatContainer.classList.add('expanded');
+    document.body.classList.add('chat-expanded');
+  }
+
+  function collapseChat() {
+    if (!chatContainer.classList.contains('expanded')) return;
+    chatContainer.classList.remove('expanded');
+    document.body.classList.remove('chat-expanded');
+    chatInput.blur();
+  }
+
+  chatInput.addEventListener('focus', expandChat);
+
+  chatContainer.addEventListener('pointerdown', function(e) {
+    if (chatCollapse && chatCollapse.contains(e.target)) return;
+    expandChat();
+  });
+
+  if (chatCollapse) {
+    chatCollapse.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      collapseChat();
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && chatContainer.classList.contains('expanded')) {
+      collapseChat();
+    }
+  });
 
   // ── File attachment state ──────────────────────────────────────
   let pendingFile = null;
