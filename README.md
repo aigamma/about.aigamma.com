@@ -1,6 +1,6 @@
 # about.aigamma.com
 
-Production consultancy and bio site for [AI Gamma LLC](https://aigamma.com), deployed at https://about.aigamma.com. The apex aigamma.com domain hosts the React quant dashboard; this subdomain hosts the founder bio, capabilities overview, and the streaming Claude chat demo. Built and maintained by Eric Allione.
+Production consultancy and bio site for [AI Gamma](https://aigamma.com), deployed at https://about.aigamma.com. The apex aigamma.com domain hosts the React quant dashboard; this subdomain hosts the founder bio, capabilities overview, and the streaming Claude chat demo. Built and maintained by Eric Allione.
 
 ## Architecture
 
