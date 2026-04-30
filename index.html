@@ -249,6 +249,28 @@
     background: var(--accent);
   }
 
+  .hero-greeting {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-greeting code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--accent);
+    background: rgba(74, 158, 255, 0.08);
+    padding: 0.15em 0.45em;
+    border-radius: 3px;
+    letter-spacing: 0;
+  }
+
   .hero h1 {
     font-family: var(--font-display);
     font-size: clamp(2.2rem, 4.5vw, 4rem);
@@ -1514,6 +1536,7 @@
 
   <div class="hero-content">
     <div class="hero-badge">Revenue Systems Architecture</div>
+    <p class="hero-greeting"><code>Hello world</code>, my name is Eric Allione.</p>
     <h1>I find where complex<br>systems <em>lose value</em><br>and build the fix.</h1>
     <p class="hero-sub">
       Interdisciplinary systems architect and 5x operator: leverages AI strategy for cognitive amplification and to act as a force multiplier for departments. Worked across defense infrastructure, quantitative finance, DevOps, regulated healthcare, marketing, and revenue engineering. The range comes from a methodology, not a collection of credentials: first-principles reasoning rooted in philosophy, systematically amplified by AI ensemble workflows that turn any bounded domain into a solvable problem.
