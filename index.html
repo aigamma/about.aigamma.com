@@ -1737,11 +1737,23 @@
     chatInput.blur();
   }
 
-  chatInput.addEventListener('focus', expandChat);
+  // Fullscreen expansion is desktop-only — on mobile it traps users
+  const desktopChat = window.matchMedia('(min-width: 901px)');
+
+  function maybeExpandChat() {
+    if (!desktopChat.matches) return;
+    expandChat();
+  }
+
+  chatInput.addEventListener('focus', maybeExpandChat);
 
   chatContainer.addEventListener('pointerdown', function(e) {
     if (chatCollapse && chatCollapse.contains(e.target)) return;
-    expandChat();
+    maybeExpandChat();
+  });
+
+  desktopChat.addEventListener('change', function(e) {
+    if (!e.matches) collapseChat();
   });
 
   if (chatCollapse) {
