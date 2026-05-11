@@ -1,6 +1,28 @@
 [functions]
   directory = "netlify/functions"
 
+# /api/chat reads data/aigamma-site-index.txt at module init via readFileSync
+# and splices the content into every chat-session system prompt as the
+# [AIGAMMA.COM SITE INDEX] block so the open-ended about chatbot can answer
+# cross-site "what's on aigamma.com" / "what's the menu" questions without
+# falling back to "this is a one-page site." The Netlify bundler cannot trace
+# runtime fs reads automatically, so the explicit included_files entry is
+# what guarantees the file lands inside the deployed function bundle (mirrors
+# the same pattern in aigamma.com/netlify.toml for src/data/site-index.txt).
+#
+# Sync requirement: data/aigamma-site-index.txt is a copy of
+# aigamma.com/src/data/site-index.txt (single source of truth on the aigamma
+# repo). Re-copy after any aigamma site-structure change (page added /
+# removed / renamed / re-described) so the about chatbot stays consistent
+# with the aigamma chatbots. The aigamma chat function loads the same file
+# at runtime from its own bundle, so a one-place edit on aigamma followed by
+# a re-copy here keeps both sides in lockstep until the next deploy on each.
+#
+# Failure to read the file is non-fatal at the function level (chat.mjs
+# degrades silently to the bare system prompt without the SITE INDEX block).
+[functions.chat]
+  included_files = ["data/aigamma-site-index.txt"]
+
 # Local Netlify Build Plugin that pushes about.aigamma.com's URL list to
 # Bing's IndexNow API after every successful production deploy. The plugin
 # lives at netlify/plugins/indexnow and reads sitemap.xml at the publish

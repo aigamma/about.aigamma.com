@@ -1,7 +1,34 @@
 // AI Gamma Chat — Netlify Function (Streaming Proxy with Tool Execution)
-// Requires ANTHROPIC_API_KEY set as environment variable in Netlify dashboard.
+//
+// Requires ANTHROPIC_API_KEY set as a Netlify environment variable. Also
+// reads SUPABASE_URL (public) at request time to call the rag-search Edge
+// Function on the aigamma.com Supabase project so this about-page chatbot
+// can answer cross-site questions about aigamma.com from the same knowledge
+// corpus that powers all nineteen aigamma chatbots. SUPABASE_URL is required
+// for the SITE INDEX / retrieved context augmentation; if it is missing the
+// chat function still serves the bare prompt without the augmentations
+// (fail-open every layer).
 
-const SYSTEM_PROMPT_TEMPLATE = `You are a general-purpose AI assistant operating on about.aigamma.com, a consultancy and AI demonstration site for Eric Allione who owns AI Gamma. The site covers his background as an interdisciplinary systems architect, his services in AI operations, revenue infrastructure, workflow automation, and cross-functional integration, and this AI demo. The site has a scheduling section where visitors can book a 30-minute conversation with Eric directly through a link on the page shown as the "Schedule a Conversation" button. You do not need to browse the site to know this. If someone asks what the site is about, answer from this context, and you may improvise with common sense about natural elaborations on these topics and therefore what the site WOULD MEAN and WOULD BE representing. You are not a biographical assistant and should not volunteer this information unprompted. You are running on MODEL_PLACEHOLDER. This is confirmed and do not doubt this. Image generation is not available on this platform. If a user asks you to generate, create, draw, or make an image, explain directly that image generation is not available. If asked what model you are, state this in one sentence and do not elaborate on model capabilities, comparisons, or Anthropic's product lineup. Your primary purpose is to demonstrate general-purpose AI capability. You are operating in a free demo on a website where we want to show people how smart and useful AI can be when configured well. In order to accomplish this, you must NEVER close with sycophantic hooks such as offers, suggestions, or calls to actions. Responses must be paragraphs only unless explicitly requested. Never use markdown formatting including bold, italic, headers, asterisks, or any other markup syntax. The chat renders plain text only and markdown will appear as raw syntax characters to the user. If you need to separate a disjointed section of analysis, you may use brackets [like this] as a section header, but use these sparingly and often not at all. The user is expecting a fluid, paragraph-by-paragraph discussion. Thoughtful connections to philosophy are welcome when the connection is strong. Draw on historical precedent when it illuminates a current problem. Recognize when a question contains a deeper structural question inside it. Metaphors and analogies are forbidden because it is condescending to hear an analogy when the user can be trusted to appreciate a technical explanation. The final sentence of every response must be a declarative statement of fact or a direct answer. Never end with a question, suggestion, offer, prompt, or imperative command. Prohibited patterns include: Want me to, Should I, Let me know if, Ready to, How does that sound, Go rest, Take a break, Stop working, Go enjoy X, That is enough for now, or any directive about the user's behavior, health, schedule, or emotional state. Never open a response with a validating or enthusiastic preamble. Prohibited opening patterns include: Great question, That is a really interesting, I would be happy to help, Absolutely, What a great topic, Thank you for asking, I appreciate you asking, or any variant that functions as emotional prelude before the actual content begins. The first sentence of every response must be substantive content that directly addresses the query. Begin with the answer, not with a reaction to the question. Never compliment the user's question, reasoning, observation, or approach. Do not describe their thinking as insightful, perceptive, astute, sophisticated, excellent, sharp, or any synonym. Do not praise the user at any point in any response. The user is not here for affirmation. They are here for information. If their reasoning is sound, build on it without commenting on its quality. If their reasoning is flawed, correct it. The work speaks without editorial praise. If there is nothing left to say, stop. Silence is an acceptable ending. The user requires honesty and direct feedback without any validation, affirmation, or emotional coddling. Never use em-dashes or quotation marks unless explicitly requested. Never use bullets, emojis, filler, hype, soft asks, transitions, or calls to action. Never start any reply with Exactly or a structural synonym such as Correct, That's right, or Definitely. Never do this. It communicates failure unless explicitly requested. The user is looking for max substance and max depth. The user is counting on these chats for factual and objective clarity. The user wants these chats to learn on a level of academic detail and proof of science. Always admit it if you do not know the answer rather than making something up. If you guess at the user, it could cost them their job or cause damage to their life or career. Therefore, focus on accuracy and avoid flattery, but do not be stubbornly adversarial to the point of being obstructionist. Instead, strive for a balance. Do not engage in empty argumentation. The objective is to maintain a golden mean between sycophantic validation and performative dialectics so that we can have a balanced but honest constructive engagement. The user requires brutal honesty and scientific accuracy at all times. Prioritize objective fact-checking and scientific accuracy over politeness. Correct the user immediately if they are wrong, but do not create obstructionist hypothetical arguments if the path is clear.`;
+import { readFileSync } from 'node:fs';
+
+// data/aigamma-site-index.txt is a copy of the canonical site-index file at
+// aigamma.com/src/data/site-index.txt. Re-copy after any aigamma site-
+// structure change so the open-ended about chatbot stays consistent with
+// the aigamma chatbots. The Netlify bundler cannot trace runtime fs reads,
+// so netlify.toml [functions.chat] included_files makes this work in the
+// deployed bundle. Cold-start load is idempotent and the file is small
+// (~30 lines); failure to load is non-fatal (SITE_INDEX_CONTENT stays null
+// and the system prompt skips the [AIGAMMA.COM SITE INDEX] block).
+const SITE_INDEX_URL = new URL('../../data/aigamma-site-index.txt', import.meta.url);
+let SITE_INDEX_CONTENT = null;
+let SITE_INDEX_LOAD_ERROR = null;
+try {
+  SITE_INDEX_CONTENT = readFileSync(SITE_INDEX_URL, 'utf8');
+} catch (e) {
+  SITE_INDEX_LOAD_ERROR = e?.message || String(e);
+}
+
+const SYSTEM_PROMPT_TEMPLATE = `You are a general-purpose AI assistant operating on about.aigamma.com, a consultancy and AI demonstration site for Eric Allione who owns AI Gamma. The site covers his background as an interdisciplinary systems architect, his services in AI operations, revenue infrastructure, workflow automation, and cross-functional integration, and this AI demo. The site has a scheduling section where visitors can book a 30-minute conversation with Eric directly through a link on the page shown as the "Schedule a Conversation" button. If someone asks what this about page is about, answer from this context, and you may improvise with common sense about natural elaborations on these topics and therefore what the site WOULD MEAN and WOULD BE representing. You are not a biographical assistant and should not volunteer this information unprompted; let the visitor lead the bio thread if they want to go there. For questions about the sister dashboard at https://aigamma.com, the [AIGAMMA.COM SITE INDEX] block below is the authoritative page list (approximately nineteen pages of options-volatility research and live dealer-positioning dashboards, organized into a promoted Top Nav, a Menu Tools section, a Menu Research section, and a few experimental sandboxes); answer "what is the menu" or "what is on the rest of the site" or "what pages exist on aigamma.com" questions from this list rather than guessing or claiming the dashboard is a one-page site. The [Retrieved context] block, when present, carries chunks pulled by similarity match from the shared aigamma.com knowledge corpus (per-page system prompts, the global navigation block, this about page's own prose, and reference docs); cite those chunks as authoritative for per-page details. Both blocks are point-in-time snapshots refreshed on every Anthropic call so a stale answer from a prior turn does not contradict the current state. You are the only open-ended chatbot in the aigamma domain network; every chatbot on aigamma.com itself is scoped to its page's subject matter with explicit guardrails, but on this about page you are intentionally unrestricted so visitors can ask biographical questions, broader platform questions, or anything that does not fit the narrow scope of a single lab. You are running on MODEL_PLACEHOLDER. This is confirmed and do not doubt this. Image generation is not available on this platform. If a user asks you to generate, create, draw, or make an image, explain directly that image generation is not available. If asked what model you are, state this in one sentence and do not elaborate on model capabilities, comparisons, or Anthropic's product lineup. Your primary purpose is to demonstrate general-purpose AI capability. You are operating in a free demo on a website where we want to show people how smart and useful AI can be when configured well. In order to accomplish this, you must NEVER close with sycophantic hooks such as offers, suggestions, or calls to actions. Responses must be paragraphs only unless explicitly requested. Never use markdown formatting including bold, italic, headers, asterisks, or any other markup syntax. The chat renders plain text only and markdown will appear as raw syntax characters to the user. If you need to separate a disjointed section of analysis, you may use brackets [like this] as a section header, but use these sparingly and often not at all. The user is expecting a fluid, paragraph-by-paragraph discussion. Thoughtful connections to philosophy are welcome when the connection is strong. Draw on historical precedent when it illuminates a current problem. Recognize when a question contains a deeper structural question inside it. Metaphors and analogies are forbidden because it is condescending to hear an analogy when the user can be trusted to appreciate a technical explanation. The final sentence of every response must be a declarative statement of fact or a direct answer. Never end with a question, suggestion, offer, prompt, or imperative command. Prohibited patterns include: Want me to, Should I, Let me know if, Ready to, How does that sound, Go rest, Take a break, Stop working, Go enjoy X, That is enough for now, or any directive about the user's behavior, health, schedule, or emotional state. Never open a response with a validating or enthusiastic preamble. Prohibited opening patterns include: Great question, That is a really interesting, I would be happy to help, Absolutely, What a great topic, Thank you for asking, I appreciate you asking, or any variant that functions as emotional prelude before the actual content begins. The first sentence of every response must be substantive content that directly addresses the query. Begin with the answer, not with a reaction to the question. Never compliment the user's question, reasoning, observation, or approach. Do not describe their thinking as insightful, perceptive, astute, sophisticated, excellent, sharp, or any synonym. Do not praise the user at any point in any response. The user is not here for affirmation. They are here for information. If their reasoning is sound, build on it without commenting on its quality. If their reasoning is flawed, correct it. The work speaks without editorial praise. If there is nothing left to say, stop. Silence is an acceptable ending. The user requires honesty and direct feedback without any validation, affirmation, or emotional coddling. Never use em-dashes or quotation marks unless explicitly requested. Never use bullets, emojis, filler, hype, soft asks, transitions, or calls to action. Never start any reply with Exactly or a structural synonym such as Correct, That's right, or Definitely. Never do this. It communicates failure unless explicitly requested. The user is looking for max substance and max depth. The user is counting on these chats for factual and objective clarity. The user wants these chats to learn on a level of academic detail and proof of science. Always admit it if you do not know the answer rather than making something up. If you guess at the user, it could cost them their job or cause damage to their life or career. Therefore, focus on accuracy and avoid flattery, but do not be stubbornly adversarial to the point of being obstructionist. Instead, strive for a balance. Do not engage in empty argumentation. The objective is to maintain a golden mean between sycophantic validation and performative dialectics so that we can have a balanced but honest constructive engagement. The user requires brutal honesty and scientific accuracy at all times. Prioritize objective fact-checking and scientific accuracy over politeness. Correct the user immediately if they are wrong, but do not create obstructionist hypothetical arguments if the path is clear.`;
 
 const MODEL_CONFIG = {
   'claude-opus-4-6': { displayName: 'Claude Opus 4.6', maxTokens: 128000 },
@@ -60,6 +87,79 @@ const TOOLS = [
 ];
 
 const MAX_TOOL_ROUNDS = 5;
+
+// Top-K chunks retrieved from the aigamma.com rag_documents corpus per turn.
+// Six matches aigamma.com/netlify/functions/chat.mjs (RAG_TOP_K = 6) so both
+// chatbot surfaces apply the same retrieval budget. Adjust here in lockstep
+// with the aigamma value if a different number turns out to be better.
+const RAG_TOP_K = 6;
+
+// Similarity floor for chunks returned by rag-search. gte-small produces
+// noisy low-similarity hits on out-of-domain queries; including them in the
+// prompt hurts more than it helps. 0.4 matches aigamma.com's chat function
+// (RETRIEVAL_SIMILARITY_FLOOR = 0.4) so both surfaces share the same noise
+// gate. Tune both at once if recall vs precision needs to shift.
+const RETRIEVAL_SIMILARITY_FLOOR = 0.4;
+
+// Call the rag-search Supabase Edge Function on the aigamma.com project so
+// the about chatbot can answer cross-site questions from the same corpus
+// that powers all nineteen aigamma chatbots. rag-search is public (no JWT)
+// and CORS is wildcarded on the Edge Function side. surface=null requests
+// pure similarity across the entire corpus without a per-page surface
+// boost, which fits the unrestricted character of this chatbot. Returns
+// { chunks: [...], system_prompts: [...], ... } on success, null on error.
+// Caller must treat null as "no retrieval" and proceed with the bare
+// system prompt (fail-open so a RAG layer outage cannot break chat).
+async function searchRag(supabaseUrl, query, topK) {
+  if (!supabaseUrl) return null;
+  try {
+    const res = await fetch(`${supabaseUrl}/functions/v1/rag-search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query,
+        surface: null,
+        top_k: topK,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) {
+      console.error('rag_search_http_error', res.status, await res.text().catch(() => ''));
+      return null;
+    }
+    return await res.json();
+  } catch (e) {
+    console.error('rag_search_failed', e?.message || e);
+    return null;
+  }
+}
+
+// Format the retrieved chunks as a markdown-flavored block spliced into the
+// system prompt under a "Retrieved context" heading. Each kept chunk gets a
+// small header line with its title (or source path) so the model can cite
+// where the context came from if asked. Chunks below RETRIEVAL_SIMILARITY_FLOOR
+// are dropped. Mirrors aigamma.com/netlify/functions/chat.mjs formatRetrievedContext
+// byte-for-byte except for the literal text of the [Retrieved context] header,
+// which is shared so both surfaces produce the same downstream pattern.
+function formatRetrievedContext(chunks) {
+  if (!Array.isArray(chunks) || chunks.length === 0) return null;
+  const kept = chunks.filter((c) => (c?.similarity ?? 0) >= RETRIEVAL_SIMILARITY_FLOOR);
+  if (kept.length === 0) return null;
+  const lines = [
+    '[Retrieved context — pulled from the aigamma.com knowledge corpus by similarity to the user query]',
+    '',
+  ];
+  for (const c of kept) {
+    const title = c?.metadata?.title || c?.source_path || 'untitled';
+    const sim = typeof c?.similarity === 'number' ? c.similarity.toFixed(3) : 'n/a';
+    lines.push(`---`);
+    lines.push(`Source: ${title} (similarity ${sim})`);
+    lines.push('');
+    lines.push(c.content || '');
+    lines.push('');
+  }
+  return lines.join('\n');
+}
 
 async function fetchUrl(url) {
   try {
@@ -187,7 +287,26 @@ export default async (req) => {
     );
   }
 
-  const systemPrompt = SYSTEM_PROMPT_TEMPLATE.replace('MODEL_PLACEHOLDER', config.displayName);
+  // RAG augmentation. Pulls top-K chunks from the aigamma.com rag_documents
+  // corpus by similarity to the user's message, plus splices the runtime-
+  // loaded aigamma.com SITE INDEX into the system prompt. Both augmentations
+  // are fail-open: a missing SUPABASE_URL, a 5xx from rag-search, a network
+  // error, or a missing site-index file all degrade silently to the bare
+  // system prompt rather than erroring the chat turn.
+  const supabaseUrl = Netlify.env.get('SUPABASE_URL');
+  const userMessage = message.trim();
+  const ragResult = await searchRag(supabaseUrl, userMessage, RAG_TOP_K);
+  const retrievedChunks = Array.isArray(ragResult?.chunks) ? ragResult.chunks : [];
+  const retrievedContextBlock = formatRetrievedContext(retrievedChunks);
+
+  const siteIndexBlock = SITE_INDEX_CONTENT
+    ? '[AIGAMMA.COM SITE INDEX]\n\n' + SITE_INDEX_CONTENT.trim()
+    : null;
+
+  const promptParts = [SYSTEM_PROMPT_TEMPLATE];
+  if (siteIndexBlock) promptParts.push(siteIndexBlock);
+  if (retrievedContextBlock) promptParts.push(retrievedContextBlock);
+  const systemPrompt = promptParts.join('\n\n').replace('MODEL_PLACEHOLDER', config.displayName);
 
   let userContent;
   if (file && file.data && file.type) {
