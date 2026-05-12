@@ -1419,6 +1419,9 @@
       padding: 0.5rem 0.65rem;
     }
     .ai-chat-body { max-height: 320px; }
+    /* iOS Safari auto-zooms inputs with font-size < 16px on focus, which scrolls the chat
+       so its top edge disappears above the viewport. Pin to 16px on mobile to suppress this. */
+    .ai-chat-input-field { font-size: 16px; }
     .hero {
       grid-template-columns: 1fr;
       padding: 6rem 1.5rem 1.5rem;
