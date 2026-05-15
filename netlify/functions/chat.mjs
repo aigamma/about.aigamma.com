@@ -32,7 +32,7 @@ const SYSTEM_PROMPT_TEMPLATE = `You are a general-purpose AI assistant operating
 
 const MODEL_CONFIG = {
   'claude-opus-4-7': { displayName: 'Claude Opus 4.7', maxTokens: 128000 },
-  'claude-sonnet-4-7': { displayName: 'Claude Sonnet 4.7', maxTokens: 64000 }
+  'claude-sonnet-4-6': { displayName: 'Claude Sonnet 4.6', maxTokens: 64000 }
 };
 
 const CORS_HEADERS = {
