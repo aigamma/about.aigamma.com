@@ -8,7 +8,7 @@ Single static HTML file with one Netlify Function. No frameworks, no build syste
 
 ## Features
 
-**Streaming AI Chat Widget** with dual model tabs (Claude Sonnet 4.6 for quick analysis, Claude Opus 4.6 for deep analysis). Responses stream token-by-token via Server-Sent Events through a Netlify Function proxy to the Anthropic Messages API.
+**Streaming AI Chat Widget** with dual model tabs (Claude Sonnet 4.7 for quick analysis, Claude Opus 4.7 for deep analysis). Responses stream token-by-token via Server-Sent Events through a Netlify Function proxy to the Anthropic Messages API.
 
 **Web Search** via Anthropic's built-in web search tool. The model autonomously decides when current information is needed and searches the web before generating its response.
 
@@ -20,7 +20,7 @@ Single static HTML file with one Netlify Function. No frameworks, no build syste
 
 - Frontend: Vanilla HTML, CSS, JavaScript
 - Backend: Netlify Functions (serverless)
-- AI: Anthropic Messages API (Claude Opus 4.6, Claude Sonnet 4.6)
+- AI: Anthropic Messages API (Claude Opus 4.7, Claude Sonnet 4.7)
 - Fonts: DM Sans, JetBrains Mono, Instrument Serif
 - Deployment: Netlify
 
