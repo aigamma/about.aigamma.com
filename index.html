@@ -1032,6 +1032,11 @@
     display: flex;
   }
 
+  .ai-chat-tabs {
+    display: flex;
+    flex: 1;
+  }
+
   .chat-tab {
     flex: 1;
     padding: 0.85rem 1rem;
@@ -1545,14 +1550,17 @@
   </div>
 </nav>
 
+<main id="content">
 <!-- HERO -->
 <section class="hero" id="assistant">
   <div class="hero-grid-bg"></div>
 
   <div class="ai-chat-container" id="chatContainer">
     <div class="ai-chat-header">
-      <button class="chat-tab active" data-tab="sonnet" id="tabSonnet">Quick Analysis</button>
-      <button class="chat-tab" data-tab="opus" id="tabOpus">Deep Analysis</button>
+      <div class="ai-chat-tabs" role="tablist" aria-label="Chat model selector">
+        <button class="chat-tab active" data-tab="sonnet" id="tabSonnet" role="tab" aria-selected="true" aria-controls="chatBody">Quick Analysis</button>
+        <button class="chat-tab" data-tab="opus" id="tabOpus" role="tab" aria-selected="false" aria-controls="chatBody">Deep Analysis</button>
+      </div>
       <button class="ai-chat-collapse" id="chatCollapse" aria-label="Collapse chat">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="4 14 10 14 10 20"/>
@@ -1563,7 +1571,7 @@
         <span class="ai-chat-collapse-label">Collapse</span>
       </button>
     </div>
-    <div class="ai-chat-body" id="chatBody">
+    <div class="ai-chat-body" id="chatBody" role="tabpanel" aria-labelledby="tabSonnet">
       <div class="chat-welcome" id="chatWelcome">
         <strong style="color: var(--text-primary);">This is a demo of AI capability when properly engineered. <br><br>The chat is for information only and does not offer professional advice.</strong>
       </div>
@@ -1575,7 +1583,7 @@
     </div>
     <div class="ai-chat-file-indicator" id="chatFileIndicator">
       <span id="chatFileName"></span>
-      <button class="ai-chat-file-remove" id="chatFileRemove">&times;</button>
+      <button class="ai-chat-file-remove" id="chatFileRemove" aria-label="Remove attached file">&times;</button>
     </div>
     <input type="file" id="chatFileInput" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" style="display:none">
     <div class="ai-chat-input-area">
@@ -1796,6 +1804,7 @@
     <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="btn-primary">Schedule a Meeting</a>
   </div>
 </section>
+</main>
 
 <!-- FOOTER -->
 <footer>
@@ -1915,6 +1924,9 @@
     activeTab = tabName;
     tabSonnet.classList.toggle('active', tabName === 'sonnet');
     tabOpus.classList.toggle('active', tabName === 'opus');
+    tabSonnet.setAttribute('aria-selected', tabName === 'sonnet' ? 'true' : 'false');
+    tabOpus.setAttribute('aria-selected', tabName === 'opus' ? 'true' : 'false');
+    chatBody.setAttribute('aria-labelledby', tabName === 'sonnet' ? 'tabSonnet' : 'tabOpus');
 
     // Update glow color to match active tab
     var glowRgb = tabName === 'sonnet' ? '240, 192, 64' : '74, 158, 255';
