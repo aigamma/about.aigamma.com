@@ -156,6 +156,34 @@
     outline: none;
   }
 
+  /* Yellow pill — Philosophy link to worldthought.com, mirrors return-home chrome in amber */
+  .btn-philosophy {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    height: 3.2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    background: transparent;
+    font-weight: 700;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .btn-philosophy:hover,
+  .btn-philosophy:focus-visible {
+    background: var(--amber);
+    color: #0d1016;
+    outline: none;
+  }
+
   /* Same chrome as aigamma.com page Return Home (theme --accent-green #2ecc71) */
   .btn-return-home {
     font-family: 'Courier New', Courier, monospace;
@@ -1410,6 +1438,7 @@
       max-width: 100%;
     }
     .btn-nav-background,
+    .btn-philosophy,
     .btn-return-home,
     .nav-cta {
       font-size: 0.72rem;
@@ -1461,6 +1490,7 @@
     <div class="nav-logo"><a href="https://aigamma.com/"><img src="/logo.webp" alt="AI Gamma"></a></div>
     <div class="nav-actions">
       <a href="#background" class="btn-nav-background">BACKGROUND</a>
+      <a href="https://worldthought.com/" target="_blank" rel="noopener" class="btn-philosophy">PHILOSOPHY</a>
       <a href="https://aigamma.com/" class="btn-return-home">RETURN HOME</a>
       <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="nav-cta">Schedule a Meeting</a>
     </div>
