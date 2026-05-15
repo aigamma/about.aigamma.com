@@ -1276,30 +1276,40 @@
   .ai-chat-file-remove:hover { color: var(--text-primary); }
 
   /* ===== CHAT FULLSCREEN MODE ===== */
+  /* Loud, amber-pill styling so users in fullscreen can immediately spot the
+     escape control in the upper-right — prior gray-on-dark version was missed. */
   .ai-chat-collapse {
     display: none;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.85rem 1.2rem;
-    background: transparent;
+    gap: 0.55rem;
+    padding: 0.9rem 1.4rem;
+    background: rgba(251, 191, 36, 0.1);
     border: none;
-    border-left: 1px solid var(--border);
-    color: var(--text-secondary);
+    border-left: 2px solid var(--amber);
+    color: var(--amber);
     cursor: pointer;
     font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     transition: color 0.2s ease, background 0.2s ease;
     flex-shrink: 0;
   }
 
-  .ai-chat-collapse:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.03);
+  .ai-chat-collapse:hover,
+  .ai-chat-collapse:focus-visible {
+    color: #0d1016;
+    background: var(--amber);
+    outline: none;
   }
 
-  .ai-chat-collapse svg { flex-shrink: 0; }
+  .ai-chat-collapse svg {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5;
+  }
 
   .ai-chat-container.expanded .ai-chat-collapse {
     display: inline-flex;
