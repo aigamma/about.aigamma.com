@@ -1,0 +1,88 @@
+name: Trigger aigamma RAG refresh
+
+# When the about page's index.html prose changes on main, dispatch a
+# repository_dispatch event to aigamma/aigamma.com so its
+# refresh-rag.yml workflow picks up the change within minutes instead
+# of waiting up to 24 hours for the next daily cron tick.
+#
+# The about repo does not own the RAG corpus (the corpus lives in the
+# shared aigamma.com Supabase rag_documents table; the aigamma.com
+# walker is the one that ingests this repo's index.html as a cross-
+# repo source). So instead of duplicating the walker here, this
+# workflow just kicks the aigamma workflow.
+#
+# One-time setup required (see CLAUDE.md "Self-updating RAG" section
+# in either repo for the step-by-step):
+#   1. Create a fine-grained Personal Access Token at
+#      https://github.com/settings/personal-access-tokens/new with:
+#        - Resource owner: aigamma
+#        - Repository access: Only select repositories -> aigamma.com
+#        - Repository permissions: Contents = Read; Metadata = Read
+#          (automatic); Actions = Write
+#        - Expiration: as long as you are comfortable rotating
+#   2. In this repo (aigamma/about.aigamma.com): Settings -> Secrets
+#      and variables -> Actions -> New repository secret. Name it
+#      AIGAMMA_RAG_DISPATCH_TOKEN and paste the PAT.
+#
+# If the secret is missing or invalid, this workflow fails fast on the
+# dispatch step. The daily aigamma.com cron remains the safety net so
+# the corpus is at worst 24 hours stale even when this dispatch is
+# broken.
+#
+# The paths filter restricts the dispatch to changes that actually
+# affect what the walker ingests. Edits to README, AGENTS.md, the
+# Netlify chat function logic, or anything else under this repo do
+# not change the indexed chunks (the walker only reads index.html
+# from this repo), so they should not consume CI cycles on the
+# sibling repo.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+  workflow_dispatch:
+
+# One queued dispatch is enough; if a maintainer lands two index.html
+# edits in rapid succession, the second push's dispatch supersedes
+# the first (latest content is what aigamma's walker will see anyway).
+concurrency:
+  group: trigger-rag-refresh
+  cancel-in-progress: true
+
+jobs:
+  dispatch:
+    name: Dispatch rag-refresh-requested to aigamma/aigamma.com
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Verify PAT secret is present
+        env:
+          TOKEN: ${{ secrets.AIGAMMA_RAG_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::AIGAMMA_RAG_DISPATCH_TOKEN secret is not set. The cross-repo dispatch cannot fire. The aigamma.com daily cron is still the safety net, so the corpus will refresh on its next tick. See CLAUDE.md Self-updating RAG section for the PAT setup steps."
+            exit 1
+          fi
+
+      - name: Dispatch refresh-rag in aigamma/aigamma.com
+        env:
+          GH_TOKEN: ${{ secrets.AIGAMMA_RAG_DISPATCH_TOKEN }}
+        run: |
+          gh api repos/aigamma/aigamma.com/dispatches \
+            -f event_type=rag-refresh-requested \
+            -f 'client_payload[source_repo]=aigamma/about.aigamma.com' \
+            -f 'client_payload[source_sha]=${{ github.sha }}' \
+            -f 'client_payload[source_event]=${{ github.event_name }}'
+          echo "Dispatched rag-refresh-requested for commit ${{ github.sha }}"
+
+      - name: Summarize
+        if: always()
+        run: |
+          echo "## Cross-repo dispatch summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Target: aigamma/aigamma.com (workflow: refresh-rag.yml)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Event type: rag-refresh-requested" >> "$GITHUB_STEP_SUMMARY"
+          echo "Source commit: ${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Source event: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
