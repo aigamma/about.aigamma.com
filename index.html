@@ -396,44 +396,6 @@
     filter: blur(80px);
   }
 
-  /* ===== BLOG FIGURE =====
-     One consistent footprint for every embedded image regardless of source aspect ratio.
-     aspect-ratio + object-fit: cover crops to 16:9 in-browser; CSS, not the file, enforces size.
-     Replace placeholder picsum src with /images/<slug>.webp per /images/README.md. */
-  .blog-figure {
-    margin: 3rem auto;
-    max-width: 100%;
-    text-align: center;
-  }
-
-  .blog-figure img {
-    display: block;
-    width: 100%;
-    max-width: 1000px;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    margin: 0 auto;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--bg-secondary);
-  }
-
-  .blog-figure figcaption {
-    margin: 1rem auto 0;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    color: var(--text-tertiary);
-    line-height: 1.6;
-    max-width: 720px;
-    font-style: italic;
-  }
-
-  @media (max-width: 900px) {
-    .blog-figure { margin: 2rem auto; }
-  }
-
   /* ===== SECTION BASE ===== */
   section {
     padding: 5rem 2rem;
@@ -1652,14 +1614,6 @@
     <h2 class="section-heading">The problems I solve tend to share a common structure.</h2>
     <p class="section-body">Organizations accumulate infrastructure debt and communication silos over time. The symptoms look like revenue problems or marketing problems, but the root cause is almost always a systems problem that nobody has the cross-functional visibility to diagnose. That diagnosis is where I operate.</p>
 
-    <!-- IMAGE SLOT: problem-landscape | concept: fragmented systems / disconnected nodes / a control panel with broken indicators | aspect 16:9 | replace src with /images/<slug>.webp per /images/README.md -->
-    <figure class="blog-figure">
-      <img src="https://picsum.photos/seed/problem-landscape/1600/900"
-           alt="Placeholder — replace with: visual of fragmented organizational systems, dark editorial style"
-           width="1600" height="900" loading="lazy" decoding="async">
-      <figcaption>Placeholder — replace with the real caption.</figcaption>
-    </figure>
-
     <div class="problem-grid">
       <div class="problem-card">
         <h3>Specialists Cannot Talk to Each Other</h3>
@@ -1683,14 +1637,6 @@
     <div class="section-label">Capabilities</div>
     <h2 class="section-heading">Where I operate</h2>
     <p class="section-body">These are the domains where I have delivered measurable results, either as an embedded operator within an organization or as an independent engagement.</p>
-
-    <!-- IMAGE SLOT: services-overview | concept: workflow diagram, command center, multi-monitor operations setup | aspect 16:9 -->
-    <figure class="blog-figure">
-      <img src="https://picsum.photos/seed/services-overview/1600/900"
-           alt="Placeholder — replace with: visual of cross-domain operations or workflow architecture"
-           width="1600" height="900" loading="lazy" decoding="async">
-      <figcaption>Placeholder — replace with the real caption.</figcaption>
-    </figure>
 
     <div class="services-grid">
       <div class="service-card">
@@ -1740,14 +1686,6 @@
     <h2 class="section-heading">What sustained production looks like</h2>
     <p class="section-body">These are not cleanup metrics from broken organizations. They are sustained outputs produced at a high level over extended periods, representing the baseline of what I deliver when operating at capacity.</p>
 
-    <!-- IMAGE SLOT: results-output | concept: dense analytical work product, charts, derivatives surface, world map of operations | aspect 16:9 -->
-    <figure class="blog-figure">
-      <img src="https://picsum.photos/seed/results-output/1600/900"
-           alt="Placeholder — replace with: visual representing sustained analytical output, e.g. multi-screen analytics or a global operations map"
-           width="1600" height="900" loading="lazy" decoding="async">
-      <figcaption>Placeholder — replace with the real caption.</figcaption>
-    </figure>
-
     <div class="results-grid">
       <div class="result-card">
         <div class="result-metric">600</div>
@@ -1779,27 +1717,9 @@
     <div class="background-content">
       <div class="background-narrative">
         <p>I started as a systems engineer in the defense sector, where I served as acting lead infrastructure architect for a DoD branch spanning 22 countries and held a Top Secret clearance. That foundation in hardened systems, documentation discipline, and zero-tolerance engineering became the operating layer for everything that followed.</p>
-
-        <!-- IMAGE SLOT: background-defense | concept: world map with network nodes, server room, infrastructure topology diagram, dark editorial | aspect 16:9 -->
-        <figure class="blog-figure">
-          <img src="https://picsum.photos/seed/background-defense/1600/900"
-               alt="Placeholder — replace with: global infrastructure or network topology visual"
-               width="1600" height="900" loading="lazy" decoding="async">
-          <figcaption>Placeholder — replace with the real caption.</figcaption>
-        </figure>
-
         <p>I then dedicated five years of full-time independent study on quantitative finance, working through hundreds of books on derivatives theory, volatility modeling, and discretionary trading methodology, including deep study of the primary texts and their full bibliographies. I traded derivatives professionally during this period, specializing in volatility modeling, options structure design, and dynamic risk management.</p>
         <p>That self-directed education led to a Principal Analyst role at a derivatives analytics firm, where I became the sole subject-matter authority on model correctness, analytical methodology, and product direction. I ghostwrote all 580 of the company's institutional-grade evening market newsletters, published under the firm's brand without co-authorship or editorial oversight, and without generative AI. The writing was not market summary. It included original theoretical frameworks on topics like the interaction between open interest and gamma exposure, negative gamma feedback loop mechanics, and the structural dynamics of volatility surfaces, all developed in real time under daily deadline pressure. I built the volatility analytics tools whose methodology has since been absorbed into sell-side research at major banks and integrated into AI training corpora. I answered over 10,000 technical questions from a paying professional audience without preparation, led a private community of international quants, market makers, and fund managers with daily engagement on strategy, and served as the company's exclusive educator, personally training every paying customer on how to build trading methodologies and apply real-time analytics from charm, gamma, and volatility models that I built for the platform. The ability to take complex quantitative concepts, develop original theory around them, and make them immediately applicable to practitioners under real-time conditions is a skill I bring to every field I operate in.</p>
         <p>The foundation underneath all of it is philosophy. I have been studying the Western philosophical tradition seriously since I was fifteen, and it remains the central intellectual project of my life. I earned a B.A. in Philosophy and a Certificate in German specifically to engage with primary texts in their original language, and I continue to work through major works actively and repeatedly. That background is not ornamental. It is the reason I can enter unfamiliar domains and operate at a high level quickly, because deep engagement with systematic philosophy develops the ability to decompose any problem into its first principles, identify unstated assumptions, recognize where a position contains its own negation, and construct frameworks from the ground up rather than relying on received expertise. Every field I have worked in has been an application of that same underlying method of reasoning.</p>
-
-        <!-- IMAGE SLOT: background-philosophy | concept: open primary-source text, classical library shelf, marginalia in German, lamp-lit reading desk | aspect 16:9 -->
-        <figure class="blog-figure">
-          <img src="https://picsum.photos/seed/background-philosophy/1600/900"
-               alt="Placeholder — replace with: visual of philosophical primary-source study, ideally a classical text or annotated reading desk"
-               width="1600" height="900" loading="lazy" decoding="async">
-          <figcaption>Placeholder — replace with the real caption.</figcaption>
-        </figure>
-
         <p>The practical expression of that training is how I use AI. I run parallel inference across an ensemble of engines, including local models on my own hardware alongside commercial APIs, and apply a method rooted in how contradictions reveal what a single perspective cannot see from within itself: the same problem goes to multiple models simultaneously, minority opinions are identified and cross-pollinated back into the ensemble, and criticism from one engine is relayed to another for response. The models are not doing my thinking. They are providing material for a reasoning process that I govern, and the iterative convergence produces output that is more robust than any single model and more rigorous than unstructured prompting. It is this methodology, not conventional credentialing, that allows me to operate as a 5x multiplier across defense, finance, AI, healthcare, and marketing. The philosophy provides the reasoning architecture. The AI ensemble provides the execution speed. The combination is what makes the range possible.</p>
         <p>I now apply that combined architecture across AI engineering, regulated healthcare operations, revenue analytics, marketing operations, and cross-functional stakeholder engagement. The thread connecting all of it is the same: I find where complex systems lose value due to fragmented infrastructure or communication failure, and I build the connective layer to capture it. AI Gamma is the vehicle through which I operate, recently ratified by the Arizona Secretary of State.</p>
       </div>
