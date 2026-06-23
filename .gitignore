@@ -2,3 +2,8 @@ node_modules/
 .env
 .netlify/
 .DS_Store
+
+# Local-only reference material (personal documents). This repo is PUBLIC and the
+# Netlify publish root is the repo root, so anything committed here would be both
+# visible on GitHub and downloadable from the live site. Keep it out entirely.
+docs/
