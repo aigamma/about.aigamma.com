@@ -555,6 +555,100 @@
     border: 1px solid rgba(74, 158, 255, 0.12);
   }
 
+  /* ===== SHADED BAND UTILITY ===== */
+  .band {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ===== SELECTED WORK ===== */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .work-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .work-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .work-card-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .work-card-name:hover { color: var(--accent); }
+  .work-card-name .arrow { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-tertiary); }
+
+  .work-card-oneliner {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .work-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .work-card-metric {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--green);
+    line-height: 1.5;
+  }
+
+  .work-card-foot {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    flex-wrap: wrap;
+  }
+
+  .work-tags {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+
+  .work-commits {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  .work-commits strong { color: var(--green); font-weight: 500; }
+
   /* ===== RESULTS ===== */
   .results {
     background: var(--bg-secondary);
@@ -1618,26 +1712,70 @@
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section class="problem" id="problem">
+<!-- SELECTED WORK -->
+<section class="band" id="work">
   <div class="container">
-    <div class="section-label">The Landscape</div>
-    <h2 class="section-heading">The problems I solve tend to share a common structure.</h2>
-    <p class="section-body">Organizations accumulate infrastructure debt and communication silos over time. The symptoms look like revenue problems or marketing problems, but the root cause is almost always a systems problem that nobody has the cross-functional visibility to diagnose. That diagnosis is where I operate.</p>
+    <div class="section-label">Selected Work</div>
+    <h2 class="section-heading">Production systems, built from scratch.</h2>
+    <p class="section-body">A sample of what I have shipped solo in the last three months. Every one is hand-coded, serverless, and template-free, with the math and the infrastructure built rather than imported. Live links where the work is public.</p>
 
-    <div class="problem-grid">
-      <div class="problem-card">
-        <h3>Specialists Cannot Talk to Each Other</h3>
-        <p>Engineering, marketing, finance, and operations each speak a different language. Without someone translating between them, decisions are made locally rather than systemically, and value falls through the gaps.</p>
+    <div class="work-grid">
+
+      <div class="work-card">
+        <a class="work-card-name" href="https://aigamma.com/" target="_blank" rel="noopener">aigamma.com <span class="arrow">&#8599;</span></a>
+        <div class="work-card-oneliner">Real-time options and volatility platform</div>
+        <p>A real-time S&amp;P 500 options and volatility dashboard with nine in-browser quant labs running SVI, Heston, gamma-exposure, and volatility-risk-premium models over years of reconstructed market history, fed by a self-hosted end-of-day pipeline and a RAG-grounded assistant.</p>
+        <div class="work-card-metric">27,000+ option contracts processed per run in under a minute, zero errors across eight consecutive runs.</div>
+        <div class="work-card-foot">
+          <span class="work-tags">Rust &middot; Supabase &middot; SVI / Heston &middot; RAG</span>
+          <span class="work-commits"><strong>~996</strong> commits</span>
+        </div>
       </div>
-      <div class="problem-card">
-        <h3>Attribution Is Broken</h3>
-        <p>Tracking and tagging infrastructure accumulates years of misconfigurations, redundant containers, and deprecated scripts. Decisions get made on data that does not reflect reality, and nobody knows because the instrument panel itself is broken.</p>
+
+      <div class="work-card">
+        <a class="work-card-name" href="https://worldthought.com/" target="_blank" rel="noopener">worldthought.com <span class="arrow">&#8599;</span></a>
+        <div class="work-card-oneliner">Philosophy knowledge base, idea-first</div>
+        <p>An educational philosophy reference where 156 thinkers each get a sourced, idea-first study room and an AI guide grounded in public-domain primary texts, linked by an interactive similarity graph and a vintage geo-coded world map, kept current by a nightly ingestion pipeline.</p>
+        <div class="work-card-metric">156 philosopher rooms linked by nearly 2,000 computed relationships, over 51,000 indexed knowledge chunks.</div>
+        <div class="work-card-foot">
+          <span class="work-tags">RAG &middot; nightly pipeline &middot; network graph</span>
+          <span class="work-commits"><strong>327</strong> commits</span>
+        </div>
       </div>
-      <div class="problem-card">
-        <h3>AI Is Bolted On, Not Integrated</h3>
-        <p>AI tools get adopted without the operational infrastructure to support them. The result is scattered automations with no provenance, no documentation, and no boundary controls, especially dangerous in regulated industries.</p>
+
+      <div class="work-card">
+        <a class="work-card-name" href="https://ai-firehose.com/" target="_blank" rel="noopener">ai-firehose.com <span class="arrow">&#8599;</span></a>
+        <div class="work-card-oneliner">Self-updating AI knowledge base</div>
+        <p>An AI news and learning platform on a fully automated pipeline that pulls from seven sources, classifies and summarizes each item with AI, and embeds it into live semantic search, beneath a hand-curated glossary of illustrated concept pages with automatic cross-linking.</p>
+        <div class="work-card-metric">644 illustrated concept pages and 8,000+ internal links verified with zero broken, guarded by a 218-check suite refreshing every six hours.</div>
+        <div class="work-card-foot">
+          <span class="work-tags">semantic search &middot; automated pipeline &middot; embeddings</span>
+          <span class="work-commits"><strong>275</strong> commits</span>
+        </div>
       </div>
+
+      <div class="work-card">
+        <a class="work-card-name" href="https://learnrust.ai/" target="_blank" rel="noopener">learnrust.ai <span class="arrow">&#8599;</span></a>
+        <div class="work-card-oneliner">Rust, taught in Rust</div>
+        <p>A Rust learning platform written end-to-end in Rust, from server and browser to database and deployment, with an in-browser code runner and an AI tutor grounded in its own curriculum. The build verifies itself before it ships.</p>
+        <div class="work-card-metric">A compiler harness compiles every lesson example and blocks publish on any failure. It caught two real lesson errors on its first run.</div>
+        <div class="work-card-foot">
+          <span class="work-tags">Rust full-stack &middot; WASM &middot; MCP &middot; CI gating</span>
+          <span class="work-commits"><strong>97</strong> commits</span>
+        </div>
+      </div>
+
+      <div class="work-card">
+        <a class="work-card-name" href="https://selectsectors.com/" target="_blank" rel="noopener">selectsectors.com <span class="arrow">&#8599;</span></a>
+        <div class="work-card-oneliner">Strategy backtesting in the browser</div>
+        <p>A public site for testing rules-based stock-sector strategies against real historical data, with six strategies, a written curriculum and quiz, and SelectBot, a from-scratch streaming teaching chatbot that remembers each visitor's conversation between visits.</p>
+        <div class="work-card-metric">Six backtest strategies on a Rust-to-WASM core, kept honest by a 966-check automated test suite across 54 files.</div>
+        <div class="work-card-foot">
+          <span class="work-tags">Rust &rarr; WASM &middot; SSE chatbot &middot; Netlify</span>
+          <span class="work-commits"><strong>186</strong> commits</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
