@@ -1526,6 +1526,17 @@
       justify-content: center;
     }
   }
+
+  /* The long hero eyebrow ("FULL-STACK AI AGENTIC ARCHITECT") needs a smaller
+     type size and tighter tracking to hold one line on phone widths. */
+  @media (max-width: 560px) {
+    .hero-badge {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      gap: 0.55rem;
+    }
+    .hero-badge::before { width: 16px; }
+  }
 </style>
 </head>
 <body>
@@ -1595,14 +1606,14 @@
   </div>
 
   <div class="hero-content">
-    <div class="hero-badge">AI Quant</div>
-    <h1>Hello world, my name is Eric Allione. I find where complex systems <em>lose value</em> and build the fix.</h1>
+    <div class="hero-badge">Full-Stack AI Agentic Architect</div>
+    <h1>Hello world, my name is Eric Allione. I take AI systems from <em>empty repo to production</em>, solo and fast.</h1>
     <p class="hero-sub">
-      Interdisciplinary systems architect and 5x operator: leverages AI strategy for cognitive amplification and to act as a force multiplier for departments. Worked across defense infrastructure, quantitative finance, DevOps, regulated healthcare, marketing, and revenue engineering. The range comes from a methodology, not a collection of credentials: first-principles reasoning rooted in philosophy, systematically amplified by AI ensemble workflows that turn any bounded domain into a solvable problem.
+      In the last three months I designed and shipped roughly ten production systems from first principles, serverless and framework-free, in Rust, Python, and vanilla JavaScript: a real-time options and volatility quant platform, self-updating RAG knowledge bases, and a publication-grade verified research archive. The range comes from a method, not a stack: first-principles reasoning trained in philosophy, amplified by parallel agentic workflows that turn any bounded domain into a solvable problem.
     </p>
     <div class="hero-cta-group">
       <a href="https://calendar.app.google/iR8J2gEs8mUMxEct6" target="_blank" rel="noopener" class="btn-primary">Schedule a Meeting</a>
-      <a href="#results" class="btn-secondary">See the Work</a>
+      <a href="#work" class="btn-secondary">See the Work</a>
     </div>
   </div>
 </section>
