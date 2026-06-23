@@ -649,6 +649,62 @@
 
   .work-commits strong { color: var(--green); font-weight: 500; }
 
+  /* ===== CAPABILITY PILLARS ===== */
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .pillar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+  }
+
+  .pillar h3 {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .pillar-sub {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .pillar ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .pillar li {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .pillar li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+  }
+
   /* ===== RESULTS ===== */
   .results {
     background: var(--bg-secondary);
@@ -1780,50 +1836,54 @@
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services" id="services">
+<!-- CAPABILITIES -->
+<section class="services" id="capabilities">
   <div class="container">
     <div class="section-label">Capabilities</div>
-    <h2 class="section-heading">Where I operate</h2>
-    <p class="section-body">These are the domains where I have delivered measurable results, either as an embedded operator within an organization or as an independent engagement.</p>
+    <h2 class="section-heading">From the model to the metal.</h2>
+    <p class="section-body">I work top to bottom: the AI architecture that grounds models in verifiable data, the systems engineering that makes it fast and observable, and the quantitative analytics underneath. The through-line is correctness enforced by oracles, not assurances.</p>
 
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-number">01</div>
-        <h3>Revenue Infrastructure</h3>
-        <p>Forensic examination of analytics, attribution, and tagging infrastructure. I map the flow of value through a system, identify where it leaks, and produce documented remediation plans with projected recovery figures.</p>
-        <span class="service-tag">Analytics / Attribution / Infrastructure</span>
+    <div class="pillar-grid">
+
+      <div class="pillar">
+        <h3>AI Architecture</h3>
+        <div class="pillar-sub">Grounding models in real data</div>
+        <ul>
+          <li>Custom RAG pipelines: vector retrieval with keyword and tsvector fallback, rate limiting, and self-refreshing corpora via cross-repo CI</li>
+          <li>Cross-provider multi-model verification: a drafter plus an independent skeptic, with a human-in-the-loop gate that auto-holds unsupported claims</li>
+          <li>MCP servers and Claude Desktop integration exposing private corpora to external AI tools</li>
+          <li>Streaming SSE assistants and AI tutors grounded in primary-source and curriculum content</li>
+          <li>Vector databases: Qdrant, Pinecone, and Supabase pgvector with HNSW and embedding migration</li>
+          <li>Prompt-injection defense and AI data-provider guardrails</li>
+        </ul>
       </div>
-      <div class="service-card">
-        <div class="service-number">02</div>
-        <h3>AI Operations</h3>
-        <p>Design and implementation of AI-augmented workflows with documented provenance, access controls, and compliance boundaries. Built for regulated industries including healthcare and finance, using hybrid inference architectures with controlled data boundaries.</p>
-        <span class="service-tag">HIPAA / Automation / AI Infrastructure</span>
+
+      <div class="pillar">
+        <h3>Systems Engineering</h3>
+        <div class="pillar-sub">Making it fast, safe, observable</div>
+        <ul>
+          <li>Self-hosted scheduled data pipelines with retries, exponential backoff, and idempotent corrections</li>
+          <li>Build-gating test suites, from 200 to nearly 1,000 checks, failing on broken links or out-of-sync docs</li>
+          <li>Performance work: two-thirds payload cuts, 3.4s to 0.4s page loads, a 19-step fetch rewritten to a sub-100ms query</li>
+          <li>Distributed observability on OpenTelemetry, Prometheus, and Grafana, with PII stripped before data leaves the servers</li>
+          <li>Rust end-to-end and Rust-to-WASM compute cores, Tauri desktop apps, and cross-store browser extensions</li>
+          <li>Cross-repo CI/CD on GitHub Actions, per-IP rate limiting, and documented cost defenses</li>
+        </ul>
       </div>
-      <div class="service-card">
-        <div class="service-number">03</div>
-        <h3>Cross-Functional Integration</h3>
-        <p>I operate as the connective layer between engineering, marketing, finance, and executive teams. Stakeholder alignment, data-driven decision support, and system-level thinking applied to organizational problems that span departmental boundaries.</p>
-        <span class="service-tag">Stakeholder Alignment / Process Design</span>
+
+      <div class="pillar">
+        <h3>Backend &amp; Analytics</h3>
+        <div class="pillar-sub">Quant math and verified data</div>
+        <ul>
+          <li>Quantitative modeling: SVI surface fitting, Heston and Black-Scholes pricing, gamma exposure, and volatility risk premium</li>
+          <li>Backtesting engines with rules-based strategies and anti-bias statistics (Bonferroni, Holm, Benjamini-Hochberg)</li>
+          <li>Postgres and Supabase data layers with timestamped audit trails and automated verification against authoritative references</li>
+          <li>Row-level security enforcing access control at the database under the caller's identity, not in app logic</li>
+          <li>Inter-coder reliability statistics, Krippendorff's alpha and Cohen's kappa, verified against textbook examples</li>
+          <li>Word-level transcript reconciliation and large-scale historical ingestion</li>
+        </ul>
       </div>
-      <div class="service-card">
-        <div class="service-number">04</div>
-        <h3>Marketing and Ad Platform Strategy</h3>
-        <p>The advertising platform landscape is restructuring on a monthly and sometimes weekly basis as AI reshapes targeting, attribution, and campaign management. I manage vendor relationships directly with senior strategists at Google, Meta, and Pinterest, and translate platform-level changes into internal operational standards before they become competitive gaps.</p>
-        <span class="service-tag">Google / Meta / Pinterest / Campaign Architecture</span>
-      </div>
-      <div class="service-card">
-        <div class="service-number">05</div>
-        <h3>AI Coaching and Practitioner Training</h3>
-        <p>Most professionals have access to AI tools and no framework for using them beyond surface-level queries. I run live workshops where participants bring real problems, watch me build prompts and iterate in real time, and develop the instinct for which platform, model tier, and interaction style fits each task. The training covers multi-platform fluency across commercial AI systems, practical differences between model tiers, voice and dictation workflows, and the habit of integrating AI into daily operations rather than treating it as an occasional search engine.</p>
-        <span class="service-tag">Workshops / Multi-Platform / Prompt Architecture</span>
-      </div>
-      <div class="service-card">
-        <div class="service-number">06</div>
-        <h3>AI-Accelerated Research and Strategy</h3>
-        <p>I use multi-engine AI ensemble workflows to conduct deep, targeted research at a velocity that would normally require a dedicated analyst team. Hundreds of sources, academic papers, SEC filings, technical documentation, and competitive landscapes get synthesized into structured strategic output within hours rather than weeks. The depth is not sacrificed for speed. The AI provides the throughput. The philosophical training provides the interpretive framework that determines what the data actually means and where the strategic leverage is.</p>
-        <span class="service-tag">Competitive Intelligence / Strategic Analysis / Synthesis</span>
-      </div>
+
     </div>
   </div>
 </section>
